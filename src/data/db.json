@@ -3,7 +3,7 @@
   "cards": 
     [
       {
-        "id": 1,
+        "id": "1",
         "title": "mail chime, check new mail",
         "steps": [
           "At your office desk, when you hear the mail chime.",
@@ -12,10 +12,11 @@
           "Quickly scan your mail for 10 seconds, just enough to know what it is about.",
           "Label your mail within its right category. Urgent, Next, Delegate or Avoid.",
           "Comeback to the task you were doing."
-        ]
+        ],
+        "stage": "starting"
       },
       {
-        "id": 2,
+        "id": "2",
         "title": "open door, stand up right",
         "steps": [
           "During the day, anywhere in town.",
@@ -23,10 +24,11 @@
           "Stand up right. Put your back straight and Put your shoulder back.",
           "Take a deep breath and say to yourself : “I got this”.",
           "Carry on to where you’re headed."
-        ]
+        ],
+        "stage": "starting"
       },
       {
-        "id": 3,
+        "id": "3",
         "title": "todo thought, write to mini agenda",
         "steps": [
           "During the day, while at the office.",
@@ -36,10 +38,11 @@
           "Write down the task. Use an action verb into your description.",
           "Put your mini paper agenda back into your jacket.",
           "Go back to what you were doing."
-        ]
+        ],
+        "stage": "ending"
       },
       {
-        "id": 4,
+        "id": "4",
         "title": "first office desk routine",
         "steps": [
           "In the morning, when you enter your office for the first time.",
@@ -49,10 +52,11 @@
           "Review all events, tasks and meetings planned for today.",
           "Put your mini paper agenda in your jacket's left pocket.",
           "Fire up your PC and start working on your first planned task right away."
-        ]
+        ],
+        "stage": "ending"
       },
       {
-        "id": 5,
+        "id": "5",
         "title": "before meeting routine",
         "steps": [
           "In the office, before the start of a meeting, when waiting for other participant to arrive,",
@@ -63,7 +67,8 @@
           "Do 10 trunks extension.",
           "Review your mini paper agenda.",
           "If you still have time, review your daily mantra."
-        ]
+        ],
+        "stage": "comon"
       }
     ]
 }
