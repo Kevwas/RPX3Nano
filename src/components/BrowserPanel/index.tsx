@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  IonRow,
-  IonCol,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonListHeader,
   IonCard,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardContent,
+  IonCardTitle,
 } from "@ionic/react";
 import { Card } from "../../data/cards-context";
 import CardsSection from "./CardsSection";
@@ -18,28 +16,15 @@ const BrowserPanel: React.FC<{
   comonCards: Card[];
 }> = ({ user, startingCards, endingCards, comonCards }) => (
   <IonCard className="ion-card-section">
-    {/* Column Name */}
-    <IonRow>
-      <IonList>
-        <IonListHeader>
-          <h5>Browser</h5>
-        </IonListHeader>
-      </IonList>
-    </IonRow>
-
-    {/* Current User */}
-    <IonRow>
-      <IonCol>
-        <IonItem style={{ width: "40%" }} className="dropdown-selector">
-          <IonLabel>User: {user}</IonLabel>
-        </IonItem>
-      </IonCol>
-    </IonRow>
-
-    {/* Cards Sections */}
-    <CardsSection sectionName="Starting Card" cards={startingCards} />
-    <CardsSection sectionName="Ending Card" cards={endingCards} />
-    <CardsSection sectionName="Comon Card" cards={comonCards} />
+    <IonCardHeader>
+      <IonCardTitle>Browser</IonCardTitle>
+      <IonCardSubtitle>User: {user}</IonCardSubtitle>
+    </IonCardHeader>
+    <IonCardContent>
+      <CardsSection sectionName="Starting Card" cards={startingCards} />
+      <CardsSection sectionName="Ending Card" cards={endingCards} />
+      <CardsSection sectionName="Comon Card" cards={comonCards} />
+    </IonCardContent>
   </IonCard>
 );
 

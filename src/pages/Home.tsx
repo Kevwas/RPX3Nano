@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import {
-  IonGrid,
-  IonRow,
-  IonCol,
   IonContent,
   IonPage,
   IonHeader,
   IonToolbar,
   IonTitle,
+  IonGrid,
+  IonCol,
+  IonRow,
 } from "@ionic/react";
 import "./Home.css";
 import BrowserPanel from "../components/BrowserPanel";
@@ -17,7 +17,7 @@ import TrainerPanel from "../components/TrainerPanel";
 import CardsContext, { Card } from "../data/cards-context";
 import db from "../data/db.json";
 
-const GridExample: React.FC = () => {
+const Home: React.FC = () => {
   const user = JSON.parse(JSON.stringify(db)).user;
   const cardsCtx = useContext(CardsContext);
 
@@ -44,13 +44,13 @@ const GridExample: React.FC = () => {
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle>RPXNano Page</IonTitle>
-          {/* {isPlatform('ios') && <ToolbarAction link="/new-memory" icon={add} />} */}
         </IonToolbar>
       </IonHeader>
-      <IonContent color="medium" fullscreen>
-        <IonGrid>
-          <IonRow className="ion-align-self-center">
-            <IonCol style={{ marginBottom: "30px" }}>
+
+      <IonContent>
+        <IonGrid style={{backgroundColor: "#d3d3d3", paddingBottom: 30}}>
+          <IonRow class="ion-justify-content-center">
+            <IonCol size-md="3">
               <BrowserPanel
                 user={user}
                 startingCards={startingCards}
@@ -58,11 +58,11 @@ const GridExample: React.FC = () => {
                 comonCards={comonCards}
               />
             </IonCol>
-            <IonCol style={{ marginBottom: "30px", justifyContent: "center" }}>
+            <IonCol size-md="3">
               <EditorPanel selectedCard={cardsCtx.selectedCard} />
             </IonCol>
-            <IonCol style={{ marginBottom: "30px" }}>
-              <TrainerPanel />
+            <IonCol size-md="3">
+              <TrainerPanel selectedCard={cardsCtx.selectedCard} />
             </IonCol>
           </IonRow>
         </IonGrid>
@@ -71,4 +71,4 @@ const GridExample: React.FC = () => {
   );
 };
 
-export default GridExample;
+export default Home;

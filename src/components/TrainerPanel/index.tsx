@@ -1,181 +1,99 @@
-import React from "react";
-import {
-  IonRow,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonListHeader,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonButton,
-  IonToggle,
-  IonSelectOption,
-  IonSelect,
-} from "@ionic/react";
+import React, { useState, useEffect, useContext } from "react";
+import { IonCard } from "@ionic/react";
+import TrainerVisualPanel from "./TrainerVisualPanel";
+import TrainerControlPanel from "./TrainerControlPanel";
+import CardsContext, { Card, Step } from "../../data/cards-context";
+import { useSpeechSynthesis } from "react-speech-kit";
 
-const TrainerPanel: React.FC = () => (
-  <IonCard className="ion-card-section">
-    <IonRow>
-      <IonList>
-        <IonListHeader>
-          <h5>Trainer Visual Panel</h5>
-        </IonListHeader>
-      </IonList>
-    </IonRow>
-    <IonRow>
-      <IonCard>
-        <IonCardHeader>
-          <IonCardTitle>Last dropped card</IonCardTitle>
-          {/* <IonCardSubtitle></IonCardSubtitle> */}
-        </IonCardHeader>
-        <IonCardContent>
-          <IonCard>
-            <IonCardContent>Step 1 text...</IonCardContent>
-          </IonCard>
-          <IonCard>
-            <IonCardContent>Step 2 text...</IonCardContent>
-          </IonCard>
-          <IonCard>
-            <IonCardContent>Step 3 text...</IonCardContent>
-          </IonCard>
-        </IonCardContent>
-      </IonCard>
-    </IonRow>
-    <IonRow>
-      <IonList>
-        <IonListHeader>
-          <h5>Trainer Control Panel</h5>
-        </IonListHeader>
-        <IonItem>
-          <h6 style={{ color: "#a0a0a0" }}>Training session setup</h6>
-        </IonItem>
-        <IonItem>
-          <IonLabel>Card count to practice : .. 4</IonLabel>
-        </IonItem>
-        <IonItem>
-          <IonLabel>Text to speech audio</IonLabel>
-          <IonToggle slot="end" name="audio" color="success" checked />
-        </IonItem>
-        <IonItem>
-          <IonLabel>Music audio</IonLabel>
-          <IonToggle slot="end" name="audio" color="success" checked />
-        </IonItem>
-        <IonItem className="dropdown-selector">
-          <IonLabel>Music song:</IonLabel>
-          <IonSelect value="03">
-            <IonSelectOption value="01">Alice in Chains</IonSelectOption>
-            <IonSelectOption value="02">Green Day</IonSelectOption>
-            <IonSelectOption value="03">Nirvana</IonSelectOption>
-            <IonSelectOption value="04">Pearl Jam</IonSelectOption>
-            <IonSelectOption value="05">Smashing Pumpkins</IonSelectOption>
-            <IonSelectOption value="06">Soundgarden</IonSelectOption>
-            <IonSelectOption value="07">Stone Temple Pilots</IonSelectOption>
-          </IonSelect>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            re-start training
-          </IonButton>
-        </IonItem>
-        <div style={{ height: "20px" }}></div>
-        <IonItem>
-          <h6 style={{ color: "#a0a0a0" }}>Training session navigation</h6>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            next step
-          </IonButton>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            previous step
-          </IonButton>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            next card
-          </IonButton>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            previous card
-          </IonButton>
-        </IonItem>
+const TrainerPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard }) => {
+  const cardsCtx = useContext(CardsContext);
+  const [stepsStack, setStepsStack] = useState<Step[]>([selectedCard.steps[0]]);
+  const [stepsQueu, setStepsQueu] = useState<Step[] | []>(
+    selectedCard.steps.slice(1)
+  );
+  const { speak } = useSpeechSynthesis();
 
-        <div style={{ height: "20px" }}></div>
-        <IonItem>
-          <h6 style={{ color: "#a0a0a0" }}>Mastery feedback</h6>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            easy
-          </IonButton>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            good
-          </IonButton>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            hard
-          </IonButton>
-        </IonItem>
-        <IonItem>
-          <IonButton
-            className="ion-button"
-            color="primary"
-            expand="block"
-            size="default"
-          >
-            forgotten
-          </IonButton>
-        </IonItem>
-      </IonList>
-    </IonRow>
-  </IonCard>
-);
+  const textToSpeech = () => {
+    const stepsStackCopy = [...stepsStack];
+    const text = stepsStackCopy.pop()!.text;
+    speak({ text });
+  };
+
+  const addStepToStepsStack = () => {
+    // If there is no more cards on the stepsQueu array
+    // Then, update the selectedCard to be the next card on the cards array
+    // And, add the first step of the new card to the stepsStack
+    // And, add the rest of the steps of the cards to the stepsQueu
+    if (stepsQueu.length === 0) {
+      const indexOfCurrentCard = cardsCtx.cards.findIndex(
+        (card) => card.id === selectedCard.id
+      );
+      if (cardsCtx.cards[indexOfCurrentCard + 1]) {
+        const newCard = cardsCtx.cards[indexOfCurrentCard + 1];
+        cardsCtx.updateSelectedCard(newCard);
+        setStepsStack([selectedCard.steps[0]]);
+        setStepsQueu(selectedCard.steps.slice(1));
+      } else {
+        // Training done logic
+      }
+      // If there are steps remaining in the stepsQueu array
+      // then shift the first step of the stepsQueu array
+      // and add this shifted step to the the stepsStack
+    } else {
+      const stepsStackCopy = [...stepsStack];
+      const stepsQueuCopy = [...stepsQueu];
+
+      stepsStackCopy.push(stepsQueuCopy.shift()!);
+
+      setStepsStack(stepsStackCopy);
+      setStepsQueu(stepsQueuCopy);
+    }
+  };
+
+  const removeStepFromStepsStack = () => {
+    if (stepsStack.length === 0) {
+      const indexOfCurrentCard = cardsCtx.cards.findIndex(
+        (card) => card.id === selectedCard.id
+      );
+      if (cardsCtx.cards[indexOfCurrentCard - 1]) {
+        const newCard = cardsCtx.cards[indexOfCurrentCard - 1];
+        cardsCtx.updateSelectedCard(newCard);
+        setStepsStack([selectedCard.steps[0]]);
+        setStepsQueu(selectedCard.steps.slice(1));
+      }
+    } else {
+      const stepsStackCopy = [...stepsStack];
+      const stepsQueuCopy = [...stepsQueu];
+
+      stepsQueuCopy.unshift(stepsStackCopy.pop()!);
+
+      stepsStackCopy.push(stepsQueuCopy.shift()!);
+
+      setStepsStack(stepsStackCopy);
+      setStepsQueu(stepsQueuCopy);
+    }
+  };
+
+  const reStartTraining = () => {
+    setStepsStack([selectedCard.steps[0]]);
+    setStepsQueu(selectedCard.steps.slice(1));
+  };
+
+  // Update stepsStack and stepsQueu if selectedCard changes
+  useEffect(() => {
+    setStepsStack([selectedCard.steps[0]]);
+    setStepsQueu(selectedCard.steps.slice(1));
+  }, [selectedCard]);
+
+  return (
+    <IonCard className="ion-card-section">
+      <TrainerVisualPanel
+        selectedCardTitle={selectedCard.title}
+        stepsStack={stepsStack}
+      />
+      <TrainerControlPanel selectedCard={selectedCard} />
+    </IonCard>
+  );
+};
 
 export default TrainerPanel;
