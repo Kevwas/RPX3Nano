@@ -13,11 +13,16 @@ const TrainerPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard }) => {
   );
   const { speak } = useSpeechSynthesis();
 
-  const textToSpeech = () => {
-    const stepsStackCopy = [...stepsStack];
-    const text = stepsStackCopy.pop()!.text;
-    speak({ text });
-  };
+  useEffect(() => {
+    const textToSpeech = () => {
+      const stepsStackCopy = [...stepsStack];
+      const text = stepsStackCopy.pop()!.text;
+      speak({ text });
+    };
+
+    textToSpeech();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stepsStack]);
 
   const addStepToStepsStack = () => {
     // If there is no more cards on the stepsQueu array
@@ -28,13 +33,19 @@ const TrainerPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard }) => {
       const indexOfCurrentCard = cardsCtx.cards.findIndex(
         (card) => card.id === selectedCard.id
       );
-      if (cardsCtx.cards[indexOfCurrentCard + 1]) {
+      // console.log('Index of Current card: ', indexOfCurrentCard);
+      if (!!cardsCtx.cards[indexOfCurrentCard + 1]) {
         const newCard = cardsCtx.cards[indexOfCurrentCard + 1];
         cardsCtx.updateSelectedCard(newCard);
-        setStepsStack([selectedCard.steps[0]]);
-        setStepsQueu(selectedCard.steps.slice(1));
+        setStepsStack([newCard.steps[0]]);
+        setStepsQueu(newCard.steps.slice(1));
       } else {
-        // Training done logic
+        // Training done logic ?
+        // If the are no more cards
+        // Then, set the selected card to be the first card of the cards array
+        cardsCtx.updateSelectedCard(cardsCtx.cards[0]);
+        setStepsStack([cardsCtx.cards[0].steps[0]]);
+        setStepsQueu(cardsCtx.cards[0].steps.slice(1));
       }
       // If there are steps remaining in the stepsQueu array
       // then shift the first step of the stepsQueu array
@@ -51,23 +62,21 @@ const TrainerPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard }) => {
   };
 
   const removeStepFromStepsStack = () => {
-    if (stepsStack.length === 0) {
+    if (stepsStack.length === 1) {
       const indexOfCurrentCard = cardsCtx.cards.findIndex(
         (card) => card.id === selectedCard.id
       );
-      if (cardsCtx.cards[indexOfCurrentCard - 1]) {
+      if (!!cardsCtx.cards[indexOfCurrentCard - 1]) {
         const newCard = cardsCtx.cards[indexOfCurrentCard - 1];
         cardsCtx.updateSelectedCard(newCard);
-        setStepsStack([selectedCard.steps[0]]);
-        setStepsQueu(selectedCard.steps.slice(1));
+        setStepsStack([newCard.steps[0]]);
+        setStepsQueu(newCard.steps.slice(1));
       }
     } else {
       const stepsStackCopy = [...stepsStack];
       const stepsQueuCopy = [...stepsQueu];
 
       stepsQueuCopy.unshift(stepsStackCopy.pop()!);
-
-      stepsStackCopy.push(stepsQueuCopy.shift()!);
 
       setStepsStack(stepsStackCopy);
       setStepsQueu(stepsQueuCopy);
@@ -79,19 +88,55 @@ const TrainerPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard }) => {
     setStepsQueu(selectedCard.steps.slice(1));
   };
 
-  // Update stepsStack and stepsQueu if selectedCard changes
-  useEffect(() => {
-    setStepsStack([selectedCard.steps[0]]);
-    setStepsQueu(selectedCard.steps.slice(1));
-  }, [selectedCard]);
+  const nextCard = () => {
+    const indexOfCurrentCard = cardsCtx.cards.findIndex(
+      (card) => card.id === selectedCard.id
+    );
+    const next_card = cardsCtx.cards[indexOfCurrentCard + 1]
+    if (!!next_card) {
+      cardsCtx.updateSelectedCard(next_card);
+      setStepsStack([next_card.steps[0]]);
+      setStepsQueu(next_card.steps.slice(1));
+    } else {
+      cardsCtx.updateSelectedCard(cardsCtx.cards[0]);
+      setStepsStack([cardsCtx.cards[0].steps[0]]);
+    setStepsQueu(cardsCtx.cards[0].steps.slice(1));
+    }
+  };
+
+  const previousCard = () => {
+    const indexOfCurrentCard = cardsCtx.cards.findIndex(
+      (card) => card.id === selectedCard.id
+    );
+    const previous_card = cardsCtx.cards[indexOfCurrentCard - 1]
+    if (!!previous_card) {
+      cardsCtx.updateSelectedCard(previous_card);
+      setStepsStack([previous_card.steps[0]]);
+      setStepsQueu(previous_card.steps.slice(1));
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log('cards: ', cardsCtx.cards);
+  //   console.log('Steps Stack: ', stepsStack);
+  //   console.log('Steps Queu: ', stepsQueu);
+  //   console.log('SelectedCard: ', selectedCard);
+  //   console.log('__________________________');
+  // }, [selectedCard, stepsStack])
 
   return (
     <IonCard className="ion-card-section">
       <TrainerVisualPanel
-        selectedCardTitle={selectedCard.title}
         stepsStack={stepsStack}
       />
-      <TrainerControlPanel selectedCard={selectedCard} />
+      <TrainerControlPanel
+        selectedCard={selectedCard}
+        addStepToStepsStack={addStepToStepsStack}
+        removeStepFromStepsStack={removeStepFromStepsStack}
+        nextCard={nextCard}
+        previousCard={previousCard}
+        reStartTraining={reStartTraining}
+      />
     </IonCard>
   );
 };

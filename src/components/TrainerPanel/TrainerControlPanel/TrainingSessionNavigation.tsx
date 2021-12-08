@@ -4,7 +4,17 @@ import {
 } from "@ionic/react";
 import React from "react";
 
-const TrainingSessionNavigation: React.FC = () => {
+const TrainingSessionNavigation: React.FC<{
+  addStepToStepsStack: () => void;
+  removeStepFromStepsStack: () => void;
+  nextCard: () => void;
+  previousCard: () => void;
+}> = ({
+  addStepToStepsStack,
+  removeStepFromStepsStack,
+  nextCard,
+  previousCard
+}) => {
   return (
     <>
       <IonItem>
@@ -16,6 +26,7 @@ const TrainingSessionNavigation: React.FC = () => {
           color="primary"
           expand="block"
           size="default"
+          onClick={addStepToStepsStack}
         >
           next step
         </IonButton>
@@ -24,6 +35,7 @@ const TrainingSessionNavigation: React.FC = () => {
           color="primary"
           expand="block"
           size="default"
+          onClick={removeStepFromStepsStack}
         >
           previous step
         </IonButton>
@@ -32,6 +44,7 @@ const TrainingSessionNavigation: React.FC = () => {
           color="primary"
           expand="block"
           size="default"
+          onClick={nextCard}
         >
           next card
         </IonButton>
@@ -40,6 +53,7 @@ const TrainingSessionNavigation: React.FC = () => {
           color="primary"
           expand="block"
           size="default"
+          onClick={previousCard}
         >
           previous card
         </IonButton>

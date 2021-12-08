@@ -10,7 +10,21 @@ import TrainingSessionNavigation from "./TrainingSessionNavigation";
 import MasteryFeedback from "./MasteryFeedback";
 import { Card } from "../../../data/cards-context";
 
-const TrainerControlPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard }) => {
+const TrainerControlPanel: React.FC<{
+  selectedCard: Card;
+  addStepToStepsStack: () => void;
+  removeStepFromStepsStack: () => void;
+  nextCard: () => void;
+  previousCard: () => void;
+  reStartTraining: () => void;
+}> = ({
+  selectedCard,
+  addStepToStepsStack,
+  removeStepFromStepsStack,
+  nextCard,
+  previousCard,
+  reStartTraining,
+}) => {
   return (
     <>
       <IonCardHeader>
@@ -18,8 +32,16 @@ const TrainerControlPanel: React.FC<{ selectedCard: Card }> = ({ selectedCard })
       </IonCardHeader>
       <IonCardContent>
         <IonList>
-          <TrainingSessionSetup />
-          <TrainingSessionNavigation />
+          <TrainingSessionSetup
+            selectedCard={selectedCard}
+            reStartTraining={reStartTraining}
+          />
+          <TrainingSessionNavigation
+            addStepToStepsStack={addStepToStepsStack}
+            removeStepFromStepsStack={removeStepFromStepsStack}
+            nextCard={nextCard}
+            previousCard={previousCard}
+          />
           <MasteryFeedback />
         </IonList>
       </IonCardContent>

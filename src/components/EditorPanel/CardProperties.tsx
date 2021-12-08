@@ -37,7 +37,7 @@ const CardProperties: React.FC<{
         >
           <IonSelectOption value="starting">Starting</IonSelectOption>
           <IonSelectOption value="ending">Ending</IonSelectOption>
-          <IonSelectOption value="common">Common</IonSelectOption>
+          <IonSelectOption value="comon">Comon</IonSelectOption>
         </IonSelect>
         <div style={{ height: "20px" }}></div>
       </IonItem>

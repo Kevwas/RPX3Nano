@@ -1,3 +1,4 @@
+import React from "react";
 import {
   IonButton,
   IonItem,
@@ -7,9 +8,12 @@ import {
   IonSelectOption,
   IonToggle,
 } from "@ionic/react";
-import React from "react";
+import { Card } from "../../../data/cards-context";
 
-const TrainingSessionSetup: React.FC = () => {
+const TrainingSessionSetup: React.FC<{
+  selectedCard: Card;
+  reStartTraining: () => void;
+}> = ({ selectedCard, reStartTraining }) => {
   return (
     <>
       <IonListHeader>
@@ -44,6 +48,7 @@ const TrainingSessionSetup: React.FC = () => {
           color="primary"
           expand="block"
           size="default"
+          onClick={reStartTraining}
         >
           re-start training
         </IonButton>

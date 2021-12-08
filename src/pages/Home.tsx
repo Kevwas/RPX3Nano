@@ -43,7 +43,7 @@ const Home: React.FC = () => {
     <IonPage className="ion-page">
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>RPXNano Page</IonTitle>
+          <IonTitle>RPX3Nano Page</IonTitle>
         </IonToolbar>
       </IonHeader>
 
