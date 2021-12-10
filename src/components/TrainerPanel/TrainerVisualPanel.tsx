@@ -23,13 +23,20 @@ const TrainerVisualPanel: React.FC<{
             {/* <IonCardSubtitle></IonCardSubtitle> */}
           </IonCardHeader>
           <IonCardContent>
-            {
-              stepsStack.map(step => 
+            <div
+              style={{
+                height: '100%',
+                width: "100%",
+                marginTop: 10,
+              }}
+              className="scroll"
+            >
+              {stepsStack.map((step) => (
                 <IonCard id={Math.random().toString() + step.id}>
                   <IonCardContent>{step.text}</IonCardContent>
                 </IonCard>
-              )
-            }
+              ))}
+            </div>
           </IonCardContent>
         </IonCard>
       </IonCardContent>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   IonButton,
   IonItem,
@@ -11,14 +11,36 @@ import {
 import { Card } from "../../../data/cards-context";
 
 const TrainingSessionSetup: React.FC<{
+  voices: SpeechSynthesisVoice[];
+  voiceIndex: number | null;
   selectedCard: Card;
+  updateVoiceIndex: (value: number) => void;
   reStartTraining: () => void;
-}> = ({ selectedCard, reStartTraining }) => {
+}> = ({ selectedCard, voices, voiceIndex, updateVoiceIndex, reStartTraining }) => {
+  useEffect(() => {
+    // console.log(voices);
+    
+  }, [voices]);
+
   return (
     <>
       <IonListHeader>
         <h6 style={{ color: "#a0a0a0" }}>Training session setup</h6>
       </IonListHeader>
+      <IonItem className="dropdown-selector">
+        <IonLabel>Voice:</IonLabel>
+        <IonSelect
+          name="voice"
+          value={voiceIndex || 0}
+          onIonChange={(e) => updateVoiceIndex(e.detail.value)}
+        >
+          {voices.map((option, index) => (
+            <IonSelectOption key={option.voiceURI} value={index}>
+              {`${option.lang} - ${option.name}`}
+            </IonSelectOption>
+          ))}
+        </IonSelect>
+      </IonItem>
       <IonItem>
         <IonLabel>Card count to practice : .. 4</IonLabel>
       </IonItem>
@@ -32,7 +54,7 @@ const TrainingSessionSetup: React.FC<{
       </IonItem>
       <IonItem className="dropdown-selector">
         <IonLabel>Music song:</IonLabel>
-        <IonSelect value="03">
+        <IonSelect value="03" name="music">
           <IonSelectOption value="01">Alice in Chains</IonSelectOption>
           <IonSelectOption value="02">Green Day</IonSelectOption>
           <IonSelectOption value="03">Nirvana</IonSelectOption>

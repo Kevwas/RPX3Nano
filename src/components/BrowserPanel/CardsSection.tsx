@@ -1,5 +1,9 @@
-import { IonItem, IonLabel, IonList, IonListHeader, IonRow } from '@ionic/react';
-import React from 'react';
+import {
+  IonCardContent,
+  IonItem,
+  IonLabel,
+} from "@ionic/react";
+import React from "react";
 import { Card } from "../../data/cards-context";
 
 const CardsSection: React.FC<{
@@ -7,19 +11,17 @@ const CardsSection: React.FC<{
   cards: Card[];
 }> = ({ sectionName, cards }) => {
   return (
-    <IonRow>
-      <IonList>
-        <IonListHeader>
-          <h5>{sectionName}</h5>
-        </IonListHeader>
+    <IonCardContent>
+      <IonLabel>{sectionName}</IonLabel>
+      <IonCardContent>
         {cards.map((card) => (
           <IonItem key={card.id}>
             <IonLabel>{card.title}</IonLabel>
           </IonItem>
         ))}
-      </IonList>
-    </IonRow>
-  )
-}
+      </IonCardContent>
+    </IonCardContent>
+  );
+};
 
 export default CardsSection;
