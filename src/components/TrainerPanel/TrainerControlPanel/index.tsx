@@ -11,14 +11,20 @@ import MasteryFeedback from "./MasteryFeedback";
 import { Card } from "../../../data/cards-context";
 
 const TrainerControlPanel: React.FC<{
+  voices: SpeechSynthesisVoice[];
+  voiceIndex: number | null;
   selectedCard: Card;
+  updateVoiceIndex: (value: number) => void;
   addStepToStepsStack: () => void;
   removeStepFromStepsStack: () => void;
   nextCard: () => void;
   previousCard: () => void;
   reStartTraining: () => void;
 }> = ({
+  voices,
+  voiceIndex,
   selectedCard,
+  updateVoiceIndex,
   addStepToStepsStack,
   removeStepFromStepsStack,
   nextCard,
@@ -35,6 +41,9 @@ const TrainerControlPanel: React.FC<{
           <TrainingSessionSetup
             selectedCard={selectedCard}
             reStartTraining={reStartTraining}
+            voices={voices}
+            voiceIndex={voiceIndex}
+            updateVoiceIndex={updateVoiceIndex}
           />
           <TrainingSessionNavigation
             addStepToStepsStack={addStepToStepsStack}
