@@ -30,32 +30,30 @@ const TrainerControlPanel: React.FC<{
   nextCard,
   previousCard,
   reStartTraining,
-}) => {
-  return (
-    <>
-      <IonCardHeader>
-        <IonCardTitle>Trainer Control Panel</IonCardTitle>
-      </IonCardHeader>
-      <IonCardContent>
-        <IonList>
-          <TrainingSessionSetup
-            selectedCard={selectedCard}
-            reStartTraining={reStartTraining}
-            voices={voices}
-            voiceIndex={voiceIndex}
-            updateVoiceIndex={updateVoiceIndex}
-          />
-          <TrainingSessionNavigation
-            addStepToStepsStack={addStepToStepsStack}
-            removeStepFromStepsStack={removeStepFromStepsStack}
-            nextCard={nextCard}
-            previousCard={previousCard}
-          />
-          <MasteryFeedback />
-        </IonList>
-      </IonCardContent>
-    </>
-  );
-};
+}) => (
+  <>
+    <IonCardHeader>
+      <IonCardTitle>Trainer Control Panel</IonCardTitle>
+    </IonCardHeader>
+    <IonCardContent>
+      <IonList>
+        <TrainingSessionSetup
+          selectedCard={selectedCard}
+          reStartTraining={reStartTraining}
+          voices={voices}
+          voiceIndex={voiceIndex}
+          updateVoiceIndex={updateVoiceIndex}
+        />
+        <TrainingSessionNavigation
+          addStepToStepsStack={addStepToStepsStack}
+          removeStepFromStepsStack={removeStepFromStepsStack}
+          nextCard={nextCard}
+          previousCard={previousCard}
+        />
+        <MasteryFeedback />
+      </IonList>
+    </IonCardContent>
+  </>
+);
 
 export default TrainerControlPanel;

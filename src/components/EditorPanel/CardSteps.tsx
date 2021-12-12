@@ -10,7 +10,7 @@ import { menu, close } from "ionicons/icons";
 import React from "react";
 import { Step } from "../../data/cards-context";
 
-export const CardComponent: React.FC<{ id: string; stepText: string; stepNumber: number }> =
+const CardComponent: React.FC<{ id: string; stepText: string; stepNumber: number }> =
   ({ id, stepText, stepNumber }) => (
     <IonCard id={id} style={{ width: "100%" }}>
       <IonCardHeader>
@@ -38,7 +38,7 @@ const CardSteps: React.FC<{ steps: Step[] }> = ({ steps }) => (
       className="scroll"
     >
       {steps.map((step, idx) => (
-        <CardComponent id={Math.random().toString() + step.id} stepText={step.text} stepNumber={idx + 1} />
+        <CardComponent id={idx + Math.random().toString() + step.id} stepText={step.text} stepNumber={idx + 1} />
       ))}
     </div>
   </div>

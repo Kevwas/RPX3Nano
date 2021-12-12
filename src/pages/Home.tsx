@@ -14,14 +14,14 @@ import BrowserPanel from "../components/BrowserPanel";
 import EditorPanel from "../components/EditorPanel";
 import TrainerPanel from "../components/TrainerPanel";
 import Confetti from "../components/Confetti";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+// import Swal from 'sweetalert2';
+// import withReactContent from 'sweetalert2-react-content';
 
 
 import CardsContext, { Card } from "../data/cards-context";
 import db from "../data/db.json";
 
-const MySwal = withReactContent(Swal);
+// const MySwal = withReactContent(Swal);
 
 const Home: React.FC = () => {
   const user = JSON.parse(JSON.stringify(db)).user;
@@ -75,7 +75,7 @@ const Home: React.FC = () => {
       <IonContent color="medium" fullscreen>
         <IonGrid style={{ paddingBottom: 30 }}>
           <IonRow class="ion-justify-content-center">
-            <IonCol size="12" size-md="6" size-lg="3" size-xl="2">
+            <IonCol style={{margin: 10}} size="12" size-md="6" size-lg="3" size-xl="2">
               <BrowserPanel
                 user={user}
                 startingCards={startingCards}
@@ -83,7 +83,7 @@ const Home: React.FC = () => {
                 comonCards={comonCards}
               />
             </IonCol>
-            <IonCol size="12" size-md="6" size-lg="3" size-xl="2">
+            <IonCol style={{margin: 10}} size="12" size-md="6" size-lg="3" size-xl="2">
               <EditorPanel selectedCard={cardsCtx.selectedCard} />
             </IonCol>
             {/* <IonCol size-md="3">
@@ -93,7 +93,6 @@ const Home: React.FC = () => {
               />
             </IonCol> */}
             <TrainerPanel
-              selectedCard={cardsCtx.selectedCard}
               showConfetti={showConfetti}
             />
           </IonRow>
