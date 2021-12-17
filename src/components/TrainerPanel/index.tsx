@@ -5,9 +5,6 @@ import TrainerControlPanel from "./TrainerControlPanel";
 import CardsContext, { Step } from "../../data/cards-context";
 import { useSpeechSynthesis } from "react-speech-kit";
 
-const nextStepSound = require("../../assets/sound/nextStep.wav");
-const cardFinishedSound = require("../../assets/sound/cardFinished.mp3");
-
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
 }) => {
@@ -34,25 +31,6 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stepsStack]);
-
-  const playSound = (path: string) => {
-    const audio = new Audio(path);
-    audio.crossOrigin = "anonymous";
-    // audio.src = path;
-    audio.muted = true;
-    audio.load();
-    const promise = audio.play();
-    if (promise !== undefined) {
-      // On older browsers play() does not return anything, so the value would be undefined.
-      promise
-        .then(() => {
-          // Audio is playing.
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  };
 
   const updateVoiceIndex = (value: number) => {
     voiceIndex.current = value;
@@ -88,7 +66,6 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
       // then shift the first step of the stepsQueu array
       // and add this shifted step to the the stepsStack
     } else {
-      playSound(nextStepSound);
       const stepsStackCopy = [...stepsStack];
       const stepsQueuCopy = [...stepsQueu.current];
 
