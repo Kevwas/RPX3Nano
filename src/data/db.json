@@ -13,7 +13,8 @@
           {"id": "5", "text": "Label your mail within its right category. Urgent, Next, Delegate or Avoid."},
           {"id": "6", "text": "Comeback to the task you were doing."}
         ],
-        "stage": "starting"
+        "stage": "starting",
+        "userInterval": 0.25
       },
       {
         "id": "2",
@@ -26,7 +27,8 @@
           {"id": "11", "text": "Label your mail within its right category. Urgent, Next, Delegate or Avoid."},
           {"id": "12", "text": "Carry on to where you’re headed."}
         ],
-        "stage": "starting"
+        "stage": "starting",
+        "userInterval": 7.8
       },
       {
         "id": "3",
@@ -39,7 +41,8 @@
           {"id": "17", "text": "Label your mail within its right category. Urgent, Next, Delegate or Avoid."},
           {"id": "18", "text": "Carry on to where you’re headed."}
         ],
-        "stage": "ending"
+        "stage": "ending",
+        "userInterval": 1.2
       },
       {
         "id": "4",
@@ -53,7 +56,8 @@
           {"id": "24", "text": "Put your mini paper agenda in your jacket's left pocket."},
           {"id": "25", "text": "Fire up your PC and start working on your first planned task right away."}
         ],
-        "stage": "ending"
+        "stage": "ending",
+        "userInterval": 0.8
       },
       {
         "id": "5",
@@ -68,7 +72,81 @@
           {"id": "32", "text": "Review your mini paper agenda."},
           {"id": "33", "text": "If you still have time, review your daily mantra."}
         ],
-        "stage": "comon"
+        "stage": "comon",
+        "userInterval": 1.9
+      },
+      {
+        "id": "1",
+        "title": "before meeting mail chime.",
+        "steps": [
+          {"id": "1", "text": "At your office desk, when you hear the mail chime."},
+          {"id": "2", "text": "Take a sip of water from your water bottle."},
+          {"id": "3", "text": "Open your new mail."},
+          {"id": "4", "text": "Quickly scan your mail for 10 seconds, just enough to know what it is about."},
+          {"id": "5", "text": "Label your mail within its right category. Urgent, Next, Delegate or Avoid."},
+          {"id": "6", "text": "Comeback to the task you were doing."}
+        ],
+        "stage": "starting",
+        "userInterval": 0.25
+      },
+      {
+        "id": "2",
+        "title": "open door",
+        "steps": [
+          {"id": "7", "text": "During the day, anywhere in town."},
+          {"id": "8", "text": "When you open any kind of door."},
+          {"id": "9", "text": "Stand up right. Put your back straight and Put your shoulder back."},
+          {"id": "10", "text": "Take a deep breath and say to yourself : “I got this”."},
+          {"id": "11", "text": "Label your mail within its right category. Urgent, Next, Delegate or Avoid."},
+          {"id": "12", "text": "Carry on to where you’re headed."}
+        ],
+        "stage": "starting",
+        "userInterval": 7.8
+      },
+      {
+        "id": "3",
+        "title": "write to mini agenda",
+        "steps": [
+          {"id": "13", "text": "During the day, anywhere in town."},
+          {"id": "14", "text": "When you open any kind of door."},
+          {"id": "15", "text": "Stand up right. Put your back straight and Put your shoulder back."},
+          {"id": "16", "text": "Take a deep breath and say to yourself : “I got this”."},
+          {"id": "17", "text": "Label your mail within its right category. Urgent, Next, Delegate or Avoid."},
+          {"id": "18", "text": "Carry on to where you’re headed."}
+        ],
+        "stage": "ending",
+        "userInterval": 1.2
+      },
+      {
+        "id": "4",
+        "title": "last office desk routine",
+        "steps": [
+          {"id": "19", "text": "In the morning, when you enter your office for the first time."},
+          {"id": "20", "text": "Open the windows."},
+          {"id": "21", "text": "Fill up your desk’s water bottle."},
+          {"id": "22", "text": "Take 5 minutes to write down everything you have in your mind about work, tasks and event in your mini paper agenda."},
+          {"id": "23", "text": "Review all events, tasks and meetings planned for today."},
+          {"id": "24", "text": "Put your mini paper agenda in your jacket's left pocket."},
+          {"id": "25", "text": "Fire up your PC and start working on your first planned task right away."}
+        ],
+        "stage": "ending",
+        "userInterval": 0.8
+      },
+      {
+        "id": "5",
+        "title": "before meeting mantra",
+        "steps": [
+          {"id": "26", "text": "In the office, before the start of a meeting, when waiting for other participant to arrive."},
+          {"id": "27", "text": "Open the windows."},
+          {"id": "28", "text": "Ready up your paper notebook and pencil on the table."},
+          {"id": "29", "text": "Write down any questions that come to your mind.."},
+          {"id": "30", "text": "Prepare Fruits and water bottles for all participants."},
+          {"id": "31", "text": "Do 10 trunks extension."},
+          {"id": "32", "text": "Review your mini paper agenda."},
+          {"id": "33", "text": "If you still have time, review your daily mantra."}
+        ],
+        "stage": "comon",
+        "userInterval": 1.9
       }
     ]
 }

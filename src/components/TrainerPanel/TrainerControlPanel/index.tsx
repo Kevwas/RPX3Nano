@@ -4,7 +4,7 @@ import {
   IonCardContent,
   IonList,
 } from "@ionic/react";
-import React from "react";
+import React, { MutableRefObject } from "react";
 import TrainingSessionSetup from "./TrainingSessionSetup";
 import TrainingSessionNavigation from "./TrainingSessionNavigation";
 import MasteryFeedback from "./MasteryFeedback";
@@ -14,6 +14,7 @@ const TrainerControlPanel: React.FC<{
   voices: SpeechSynthesisVoice[];
   voiceIndex: number | null;
   selectedCard: Card;
+  unlockMasteryFeedback: MutableRefObject<boolean>;
   updateVoiceIndex: (value: number) => void;
   addStepToStepsStack: () => void;
   removeStepFromStepsStack: () => void;
@@ -24,6 +25,7 @@ const TrainerControlPanel: React.FC<{
   voices,
   voiceIndex,
   selectedCard,
+  unlockMasteryFeedback,
   updateVoiceIndex,
   addStepToStepsStack,
   removeStepFromStepsStack,
@@ -50,7 +52,7 @@ const TrainerControlPanel: React.FC<{
           nextCard={nextCard}
           previousCard={previousCard}
         />
-        <MasteryFeedback />
+        <MasteryFeedback unlockMasteryFeedback={unlockMasteryFeedback} />
       </IonList>
     </IonCardContent>
   </>

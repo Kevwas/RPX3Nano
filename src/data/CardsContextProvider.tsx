@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CardsContext, { Card, Step, Stage } from "./cards-context";
+import CardsContext, { Card, Step, Stage, Difficulty } from "./cards-context";
 import jsonDB from "./db.json";
 
 const CardsContextProvider: React.FC = (props) => {
@@ -19,6 +19,7 @@ const CardsContextProvider: React.FC = (props) => {
       title,
       stage,
       steps: [],
+      userInterval: 0.25
     };
 
     setCards((prevCards) => {
@@ -94,8 +95,36 @@ const CardsContextProvider: React.FC = (props) => {
       setSelectedCard(updatedCard);
       return updatedCards;
     });
-
   };
+
+  const updateUserInterval = (cardId: string, difficulty: Difficulty) => {
+    setCards((prevCards) => {
+      const updatedCards = [...prevCards];
+      const updatedCardIndex = updatedCards.findIndex(
+        (card) => card.id === cardId
+      );
+
+      const updatedCard = { ...updatedCards[updatedCardIndex] };
+      switch (difficulty) {
+        case "easy":
+          updatedCard.userInterval *= 4;
+          break;
+        case "good":
+          updatedCard.userInterval += 1;
+          break;
+        case "hard":
+          updatedCard.userInterval /= 1.75;
+          break;
+        case "forgotten":
+          updatedCard.userInterval = 0.25;
+          break;
+      }
+      updatedCard.userInterval = Number(updatedCard.userInterval.toFixed(2));
+      updatedCards[updatedCardIndex] = updatedCard;
+      setSelectedCard(updatedCard);
+      return updatedCards;
+    });
+  }
 
   return (
     <CardsContext.Provider
@@ -107,7 +136,8 @@ const CardsContextProvider: React.FC = (props) => {
         addStep,
         deleteStep,
         updateStep,
-        updateStage
+        updateStage,
+        updateUserInterval
       }}
     >
       {props.children}

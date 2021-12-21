@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import {
   IonCard,
   IonCardHeader,
@@ -7,8 +8,7 @@ import {
   IonLabel,
 } from "@ionic/react";
 import { menu, close } from "ionicons/icons";
-import React from "react";
-import { Step } from "../../data/cards-context";
+import CardsContext from "../../data/cards-context";
 
 const CardComponent: React.FC<{ id: string; stepText: string; stepNumber: number }> =
   ({ id, stepText, stepNumber }) => (
@@ -30,18 +30,22 @@ const CardComponent: React.FC<{ id: string; stepText: string; stepNumber: number
     </IonCard>
   );
 
-const CardSteps: React.FC<{ steps: Step[] }> = ({ steps }) => (
-  <div>
-    <IonLabel>Card Steps</IonLabel>
-    <div
-      style={{ maxHeight: 400, marginTop: 10, paddingRight: 20 }}
-      className="scroll"
-    >
-      {steps.map((step, idx) => (
-        <CardComponent id={idx + Math.random().toString() + step.id} stepText={step.text} stepNumber={idx + 1} />
-      ))}
+const CardSteps: React.FC = () => {
+  const { selectedCard } = useContext(CardsContext);
+
+  return (
+    <div>
+      <IonLabel>Card Steps</IonLabel>
+      <div
+        style={{ maxHeight: 400, marginTop: 10, paddingRight: 20 }}
+        className="scroll"
+      >
+        {selectedCard.steps.map((step, idx) => (
+          <CardComponent id={idx + Math.random().toString() + step.id} stepText={step.text} stepNumber={idx + 1} />
+        ))}
+      </div>
     </div>
-  </div>
-);
+  )
+};
 
 export default CardSteps;

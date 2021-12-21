@@ -12,6 +12,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   const { selectedCard, cards, updateSelectedCard } = cardsCtx;
   const voiceIndex = useRef<number | null>(null);
   const stepsQueu = useRef<Step[] | []>([...selectedCard.steps]);
+  const unlockMasteryFeedback = useRef<boolean>(false);
 
   const [stepsStack, setStepsStack] = useState<Step[]>([]);
 
@@ -37,38 +38,46 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   };
 
   const addStepToStepsStack = () => {
-    // If there is no more cards on the stepsQueu array
+    
     // Then, update the selectedCard to be the next card on the cards array
     // And, add the first step of the new card to the stepsStack
     // And, add the rest of the steps of the cards to the stepsQueu
-    cancel();
 
-    if (stepsQueu.current.length === 0) {
+    cancel(); // Stop TTS
+
+    if (stepsQueu.current.length === 1) {
+    // Unlock the feedback buttons:
+    unlockMasteryFeedback.current = true;
+    } else {
+      // Lock the feedback buttons:
+      unlockMasteryFeedback.current = false;
+    }
+
+    if (stepsQueu.current.length === 0) { // If there is no more steps on the stepsQueu array:
       const indexOfCurrentCard = cards.findIndex(
         (card) => card.id === selectedCard.id
       );
+
       // console.log('Index of Current card: ', indexOfCurrentCard);
-      if (!!cards[indexOfCurrentCard + 1]) {
+      if (!!cards[indexOfCurrentCard + 1]) { // If there are cards remaining on the cards array:
         const newCard = cards[indexOfCurrentCard + 1];
-        updateSelectedCard(newCard);
-        setStepsStack([newCard.steps[0]]);
+        updateSelectedCard(newCard); // Update the selectedCard to be the next card on the cards array
+        setStepsStack([newCard.steps[0]]); // Reset the steps stacks to contain the first step of the just updated card
         stepsQueu.current = newCard.steps.slice(1);
-      } else {
-        // Training done logic ?
+      } else { // If the are no more cards:
+        // Training done logic:
         showConfetti();
-        // If the are no more cards
         // Then, set the selected card to be the first card of the cards array
         updateSelectedCard(cards[0]);
         setStepsStack([cards[0].steps[0]]);
         stepsQueu.current = cards[0].steps.slice(1);
       }
-      // If there are steps remaining in the stepsQueu array
-      // then shift the first step of the stepsQueu array
-      // and add this shifted step to the the stepsStack
-    } else {
+    } else { // If there are steps remaining in the stepsQueu array
       const stepsStackCopy = [...stepsStack];
       const stepsQueuCopy = [...stepsQueu.current];
 
+      // then shift the first step of the stepsQueu array
+      // and add this shifted step to the the stepsStack:
       stepsStackCopy.push(stepsQueuCopy.shift()!);
 
       setStepsStack(stepsStackCopy);
@@ -169,6 +178,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
             voices={voices}
             voiceIndex={voiceIndex.current}
             updateVoiceIndex={updateVoiceIndex}
+            unlockMasteryFeedback={unlockMasteryFeedback}
           />
         </IonCard>
       </IonCol>

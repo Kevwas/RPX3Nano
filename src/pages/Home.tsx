@@ -75,7 +75,7 @@ const Home: React.FC = () => {
       <IonContent color="medium" fullscreen>
         <IonGrid style={{ paddingBottom: 30 }}>
           <IonRow class="ion-justify-content-center">
-            <IonCol style={{margin: 10}} size="12" size-md="6" size-lg="3" size-xl="2">
+            <IonCol style={{margin: 10}} size="12" size-lg="3" >
               <BrowserPanel
                 user={user}
                 startingCards={startingCards}
@@ -83,8 +83,8 @@ const Home: React.FC = () => {
                 comonCards={comonCards}
               />
             </IonCol>
-            <IonCol style={{margin: 10}} size="12" size-md="6" size-lg="3" size-xl="2">
-              <EditorPanel selectedCard={cardsCtx.selectedCard} />
+            <IonCol style={{margin: 10}} size="12" size-lg="3" >
+              <EditorPanel />
             </IonCol>
             {/* <IonCol size-md="3">
               <TrainerPanel

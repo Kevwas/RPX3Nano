@@ -17,29 +17,22 @@ const TrainerVisualPanel: React.FC<{
         <IonCardTitle>Trainer Visual Panel</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>{cardsCtx.selectedCard.title}</IonCardTitle>
-            {/* <IonCardSubtitle></IonCardSubtitle> */}
-          </IonCardHeader>
-          <IonCardContent>
-            <div
-              style={{
-                height: '100%',
-                width: "100%",
-                marginTop: 10,
-              }}
-              className="scroll"
-            >
-              {stepsStack.map((step) => (
-                <IonCard id={Math.random().toString() + step.id}>
-                  <IonCardContent>{step.text}</IonCardContent>
-                </IonCard>
-              ))}
-            </div>
-          </IonCardContent>
-        </IonCard>
+        <IonCardTitle>{cardsCtx.selectedCard.title}</IonCardTitle>
       </IonCardContent>
+      <div
+        style={{
+          height: '100%',
+          width: "100%",
+          marginTop: 10,
+        }}
+        className="scroll"
+      >
+        {stepsStack.map((step) => (
+          <IonCard id={Math.random().toString() + step.id}>
+            <IonCardContent>{step.text}</IonCardContent>
+          </IonCard>
+        ))}
+      </div>
     </>
   );
 };

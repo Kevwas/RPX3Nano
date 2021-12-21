@@ -6,6 +6,7 @@ import React from 'react';
 // }
 
 export type Stage = "starting" | "comon" | "ending";
+export type Difficulty = "easy" | "good" | "hard" | "forgotten";
 
 export interface Step {
     id: string;
@@ -15,6 +16,7 @@ export interface Step {
 export interface Card {
     id: string;
     title: string;
+    userInterval: number;
     stage: 'starting' | 'comon' | 'ending';
     steps: Step[];
 }
@@ -28,6 +30,7 @@ interface CardContext {
     deleteStep: (cardId: string, steplId: string) => void;
     updateStep: (cardId: string, steplId: string, newText: string) => void;
     updateStage: (cardId: string, newStage: Stage) => void;
+    updateUserInterval: (cardId: string, difficulty: Difficulty) => void;
 }
 
 const CardsContext = React.createContext<CardContext>(
@@ -38,6 +41,7 @@ const CardsContext = React.createContext<CardContext>(
             title: '',
             stage: 'starting',
             steps: [],
+            userInterval: 0.25
         },
         updateSelectedCard: () => { },
         addCard: () => { },
@@ -45,6 +49,7 @@ const CardsContext = React.createContext<CardContext>(
         deleteStep: () => { },
         updateStep: () => { },
         updateStage: () => { },
+        updateUserInterval: () => { },
     }
 );
 
