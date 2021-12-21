@@ -1,6 +1,7 @@
 import React, { MutableRefObject, useContext } from "react";
 import { IonButton, IonItem } from "@ionic/react";
 import CardsContext, { Difficulty } from "../../../data/cards-context";
+import SaveStateButton from "../../SaveStateButton";
 
 const MasteryFeedback: React.FC<{ unlockMasteryFeedback: MutableRefObject<boolean> }> = ({
   unlockMasteryFeedback,
@@ -22,7 +23,7 @@ const MasteryFeedback: React.FC<{ unlockMasteryFeedback: MutableRefObject<boolea
           className="ion-button"
           color="primary"
           expand="block"
-          size="default"
+          size="small"
           disabled={!unlockMasteryFeedback.current}
           onClick={() => updateUserIntervalAndMasteryFeedback("easy")}
         >
@@ -32,7 +33,7 @@ const MasteryFeedback: React.FC<{ unlockMasteryFeedback: MutableRefObject<boolea
           className="ion-button"
           color="primary"
           expand="block"
-          size="default"
+          size="small"
           disabled={!unlockMasteryFeedback.current}
           onClick={() => updateUserIntervalAndMasteryFeedback("good")}
         >
@@ -42,7 +43,7 @@ const MasteryFeedback: React.FC<{ unlockMasteryFeedback: MutableRefObject<boolea
           className="ion-button"
           color="primary"
           expand="block"
-          size="default"
+          size="small"
           disabled={!unlockMasteryFeedback.current}
           onClick={() => updateUserIntervalAndMasteryFeedback("hard")}
         >
@@ -52,13 +53,17 @@ const MasteryFeedback: React.FC<{ unlockMasteryFeedback: MutableRefObject<boolea
           className="ion-button"
           color="primary"
           expand="block"
-          size="default"
+          size="small"
           disabled={!unlockMasteryFeedback.current}
           onClick={() => updateUserIntervalAndMasteryFeedback("forgotten")}
         >
           forgotten
         </IonButton>
       </div>
+      <IonItem style={{marginTop: 20}}>
+        <h6 style={{ color: "#a0a0a0" }}>Download State</h6>
+      </IonItem>
+      <SaveStateButton />
     </>
   )
 };

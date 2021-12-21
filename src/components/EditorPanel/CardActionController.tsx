@@ -13,7 +13,7 @@ const CardActionController: React.FC = () => (
       className="ion-button"
       color="primary"
       expand="block"
-      size="default"
+      size="small"
     >
       delete card
     </IonButton>
@@ -21,7 +21,7 @@ const CardActionController: React.FC = () => (
       className="ion-button"
       color="primary"
       expand="block"
-      size="default"
+      size="small"
     >
       duplicate card
     </IonButton>

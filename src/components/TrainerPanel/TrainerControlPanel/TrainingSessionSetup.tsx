@@ -63,7 +63,7 @@ const TrainingSessionSetup: React.FC<{
         className="ion-button"
         color="primary"
         expand="block"
-        size="default"
+        size="small"
         onClick={reStartTraining}
       >
         re-start training

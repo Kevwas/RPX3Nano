@@ -14,6 +14,7 @@ import BrowserPanel from "../components/BrowserPanel";
 import EditorPanel from "../components/EditorPanel";
 import TrainerPanel from "../components/TrainerPanel";
 import Confetti from "../components/Confetti";
+import SaveStateButton from "../components/SaveStateButton";
 // import Swal from 'sweetalert2';
 // import withReactContent from 'sweetalert2-react-content';
 
@@ -75,7 +76,7 @@ const Home: React.FC = () => {
       <IonContent color="medium" fullscreen>
         <IonGrid style={{ paddingBottom: 30 }}>
           <IonRow class="ion-justify-content-center">
-            <IonCol style={{margin: 10}} size="12" size-lg="3" >
+            <IonCol style={{margin: 10}} size="12" size-lg="3">
               <BrowserPanel
                 user={user}
                 startingCards={startingCards}
@@ -83,7 +84,7 @@ const Home: React.FC = () => {
                 comonCards={comonCards}
               />
             </IonCol>
-            <IonCol style={{margin: 10}} size="12" size-lg="3" >
+            <IonCol style={{margin: 10}} size="12" size-lg="3">
               <EditorPanel />
             </IonCol>
             {/* <IonCol size-md="3">

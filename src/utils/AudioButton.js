@@ -20,7 +20,7 @@ class AudioButton extends React.Component {
   playSound = () => {
     this.audio.current.play();
     
-    const id = this.audio.current.id;
+    // const id = this.audio.current.id;
     
     const parent = this.audio.current.parentNode;
     parent.classList.add('active');
@@ -37,7 +37,7 @@ class AudioButton extends React.Component {
           className="ion-button"
           color="primary"
           expand="block"
-          size="default"
+          size="small"
           onClick={() => {
             this.playSound();
             setTimeout(() => callback(), 100);
