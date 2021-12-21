@@ -86,7 +86,9 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   };
 
   const removeStepFromStepsStack = () => {
-    cancel();
+    // Lock the feedback buttons:
+    unlockMasteryFeedback.current = false;
+    cancel(); // Stop TTS
     if (stepsStack.length === 1) {
       const indexOfCurrentCard = cards.findIndex(
         (card) => card.id === selectedCard.id
@@ -109,7 +111,9 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   };
 
   const reStartTraining = () => {
-    cancel();
+    // Lock the feedback buttons:
+    unlockMasteryFeedback.current = false;
+    cancel(); // Stop TTS
     // Reset from first Step of current Card
     // setStepsStack([selectedCard.steps[0]]);
     // setStepsQueu(selectedCard.steps.slice(1));
@@ -121,7 +125,9 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   };
 
   const nextCard = () => {
-    cancel();
+    // Lock the feedback buttons:
+      unlockMasteryFeedback.current = false;
+    cancel(); // Stop TTS
     const indexOfCurrentCard = cards.findIndex(
       (card) => card.id === selectedCard.id
     );
@@ -138,7 +144,9 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   };
 
   const previousCard = () => {
-    cancel();
+    // Lock the feedback buttons:
+    unlockMasteryFeedback.current = false;
+    cancel(); // Stop TTS
     const indexOfCurrentCard = cards.findIndex(
       (card) => card.id === selectedCard.id
     );
