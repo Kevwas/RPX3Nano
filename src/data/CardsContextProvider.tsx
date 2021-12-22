@@ -17,7 +17,6 @@ const CardsContextProvider: React.FC = (props) => {
     // Retrieving data from localStorage once the app inits:
     (async () => {
       const cardsData = await Storage.get({ key: "RPX3NanoCards" });
-      console.log(cardsData.value)
       if (cardsData.value) {
         const loadedCards = JSON.parse(cardsData.value);
         setCards(loadedCards);

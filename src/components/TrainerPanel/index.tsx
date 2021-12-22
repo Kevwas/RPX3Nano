@@ -3,7 +3,7 @@ import { IonCard, IonCol } from "@ionic/react";
 import TrainerVisualPanel from "./TrainerVisualPanel";
 import TrainerControlPanel from "./TrainerControlPanel";
 import CardsContext, { Step } from "../../data/cards-context";
-import { useSpeechSynthesis } from "react-speech-kit";
+import { useSpeechSynthesis, SpeechSynthesisUtterance } from "react-speech-kit";
 
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
@@ -17,6 +17,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   const [stepsStack, setStepsStack] = useState<Step[]>([]);
 
   const { speak, voices, cancel } = useSpeechSynthesis();
+  // const utterance = new SpeechSynthesisUtterance();
 
   const voice: SpeechSynthesisVoice | null = voices[voiceIndex.current] || null;
 
