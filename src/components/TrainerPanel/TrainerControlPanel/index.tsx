@@ -39,13 +39,6 @@ const TrainerControlPanel: React.FC<{
     </IonCardHeader>
     <IonCardContent>
       <IonList>
-        <TrainingSessionSetup
-          selectedCard={selectedCard}
-          reStartTraining={reStartTraining}
-          voices={voices}
-          voiceIndex={voiceIndex}
-          updateVoiceIndex={updateVoiceIndex}
-        />
         <TrainingSessionNavigation
           addStepToStepsStack={addStepToStepsStack}
           removeStepFromStepsStack={removeStepFromStepsStack}
@@ -53,6 +46,13 @@ const TrainerControlPanel: React.FC<{
           previousCard={previousCard}
         />
         <MasteryFeedback unlockMasteryFeedback={unlockMasteryFeedback} />
+        <TrainingSessionSetup
+          selectedCard={selectedCard}
+          reStartTraining={reStartTraining}
+          voices={voices}
+          voiceIndex={voiceIndex}
+          updateVoiceIndex={updateVoiceIndex}
+        />
       </IonList>
     </IonCardContent>
   </>

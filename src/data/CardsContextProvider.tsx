@@ -1,25 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardsContext, { Card, Step, Stage, Difficulty } from "./cards-context";
 import jsonDB from "./db.json";
+import { Storage } from "@capacitor/storage";
 
 const CardsContextProvider: React.FC = (props) => {
-  const [cards, setCards] = useState<Card[]>(
-    JSON.parse(JSON.stringify(jsonDB)).cards
-  );
+  const [cards, setCards] = useState<Card[]>([{
+    id: '',
+    title: '',
+    stage: 'starting',
+    steps: [],
+    userInterval: 0.25
+}]);
+  const [selectedCard, setSelectedCard] = useState<Card>(cards[0]);
 
-  const [selectedCard, setSelectedCard] = useState<Card>(
-    JSON.parse(JSON.stringify(jsonDB)).cards[0]
-  ); 
+  useEffect(() => {
+    // Retrieving data from localStorage once the app inits:
+    (async () => {
+      const cardsData = await Storage.get({ key: "RPX3NanoCards" });
+      console.log(cardsData.value)
+      if (cardsData.value) {
+        const loadedCards = JSON.parse(cardsData.value);
+        setCards(loadedCards);
+        setSelectedCard(loadedCards[0]);
+      } else {
+        setCards(JSON.parse(JSON.stringify(jsonDB)).cards);
+      }
+    })()
+  }, []);
+
+  useEffect(() => {
+    // Saving data on localStorage every time the cards change:
+    Storage.set({ key: "RPX3NanoCards", value: JSON.stringify(cards) });
+  }, [cards]);
 
   const updateSelectedCard = (card: Card) => setSelectedCard(card);
-    
+
   const addCard = (title: string, stage: Stage) => {
     const newCard: Card = {
       id: Math.random().toString(),
       title,
       stage,
       steps: [],
-      userInterval: 0.25
+      userInterval: 0.25,
     };
 
     setCards((prevCards) => {
@@ -124,7 +146,7 @@ const CardsContextProvider: React.FC = (props) => {
       setSelectedCard(updatedCard);
       return updatedCards;
     });
-  }
+  };
 
   return (
     <CardsContext.Provider
@@ -137,7 +159,7 @@ const CardsContextProvider: React.FC = (props) => {
         deleteStep,
         updateStep,
         updateStage,
-        updateUserInterval
+        updateUserInterval,
       }}
     >
       {props.children}

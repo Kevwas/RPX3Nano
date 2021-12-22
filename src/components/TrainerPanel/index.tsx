@@ -168,13 +168,13 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
 
   return (
     <>
-      <IonCol style={{margin: 10}} size="12" size-md="6" size-lg="3" size-xl="2">
+      <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
         <IonCard className="ion-card-section">
           <TrainerVisualPanel stepsStack={stepsStack} />
         </IonCard>
       </IonCol>
       {/* Splitted into 2-columns TrainerControlPanel */}
-      <IonCol style={{margin: 10}} size="12" size-md="6" size-lg="3" size-xl="2">
+      <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
         <IonCard className="ion-card-section">
           <TrainerControlPanel
             selectedCard={selectedCard}
