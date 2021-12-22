@@ -21,6 +21,17 @@ const TrainingSessionSetup: React.FC<{
     <IonListHeader>
       <h6 style={{ color: "#a0a0a0" }}>Training session setup</h6>
     </IonListHeader>
+    <div style={{ padding: 10 }}>
+      <IonButton
+        className="ion-button"
+        color="primary"
+        expand="block"
+        size="small"
+        onClick={reStartTraining}
+      >
+        re-start training
+      </IonButton>
+    </div>
     <IonItem className="dropdown-selector">
       <IonLabel>Voice:</IonLabel>
       <IonSelect
@@ -58,17 +69,6 @@ const TrainingSessionSetup: React.FC<{
         <IonSelectOption value="07">Stone Temple Pilots</IonSelectOption>
       </IonSelect>
     </IonItem>
-    <div style={{ padding: 10 }}>
-      <IonButton
-        className="ion-button"
-        color="primary"
-        expand="block"
-        size="small"
-        onClick={reStartTraining}
-      >
-        re-start training
-      </IonButton>
-    </div>
   </>
 );
 
