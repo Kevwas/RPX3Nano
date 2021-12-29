@@ -3,33 +3,72 @@ import { IonCard, IonCol } from "@ionic/react";
 import TrainerVisualPanel from "./TrainerVisualPanel";
 import TrainerControlPanel from "./TrainerControlPanel";
 import CardsContext, { Step } from "../../data/cards-context";
-import { useSpeechSynthesis, SpeechSynthesisUtterance } from "react-speech-kit";
+import { useSpeechSynthesis } from "react-speech-kit";
+
+const getWordAt = (str: string, pos: number) => {
+  // Perform type conversions.
+  str = String(str);
+  pos = Number(pos) >>> 0;
+  
+  // Search for the word's beginning and end.
+  const left = str.slice(0, pos + 1).search(/\S+$/),
+  right = str.slice(pos).search(/\s/);
+  
+  // The last word in the string is a special case.
+  if (right < 0) {
+    return str.slice(left);
+  }
+
+  // Return the word, using the located bounds to extract it from the string.
+  return str.slice(left, right + pos);
+};
 
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
 }) => {
   const cardsCtx = useContext(CardsContext);
   const { selectedCard, cards, updateSelectedCard } = cardsCtx;
-  const voiceIndex = useRef<number | null>(null);
-  const stepsQueu = useRef<Step[] | []>([...selectedCard.steps]);
-  const unlockMasteryFeedback = useRef<boolean>(false);
+  const [speakingWord, setSpeakingWord] = useState<string>("");
+  const [spokenWords, setSpokenWords] = useState<string[]>([]);
 
+  const voiceIndex = useRef<number | null>(null);
+  const unlockMasteryFeedback = useRef<boolean>(false);
+  
+  const stepsQueu = useRef<Step[] | []>([...selectedCard.steps]);
   const [stepsStack, setStepsStack] = useState<Step[]>([]);
 
-  const { speak, voices, cancel } = useSpeechSynthesis();
-  // const utterance = new SpeechSynthesisUtterance();
+  const { voices, cancel, speaking } = useSpeechSynthesis();
+  
+  const utterance = new SpeechSynthesisUtterance();
+
+  utterance.onboundary = (event) => {
+    const stepsStackCopy = [...stepsStack];
+    const text = stepsStackCopy.pop()!.text;
+    const word = getWordAt(text, event.charIndex);
+
+    console.log(word);
+
+    setSpeakingWord(word);
+    setSpokenWords((prevWords) => [...prevWords, word]);
+  };
+
+  utterance.onend = () => {
+    setSpeakingWord("");
+    setSpokenWords([]);
+  };
 
   const voice: SpeechSynthesisVoice | null = voices[voiceIndex.current] || null;
 
   useEffect(() => {
     if (stepsStack.length > 0) {
-      const textToSpeech = () => {
-        const stepsStackCopy = [...stepsStack];
-        const text = stepsStackCopy.pop()!.text;
-        speak({ text, voice });
-      };
+      const stepsStackCopy = [...stepsStack];
+      const text = stepsStackCopy.pop()!.text;
 
-      textToSpeech();
+      utterance.text = text;
+      utterance.voice = voice;
+      utterance.rate = 0.7;
+
+      speechSynthesis.speak(utterance);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stepsStack]);
@@ -127,7 +166,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
 
   const nextCard = () => {
     // Lock the feedback buttons:
-      unlockMasteryFeedback.current = false;
+    unlockMasteryFeedback.current = false;
     cancel(); // Stop TTS
     const indexOfCurrentCard = cards.findIndex(
       (card) => card.id === selectedCard.id
@@ -171,7 +210,12 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     <>
       <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
         <IonCard className="ion-card-section">
-          <TrainerVisualPanel stepsStack={stepsStack} />
+          <TrainerVisualPanel
+            stepsStack={stepsStack}
+            speakingWord={speakingWord}
+            spokenWords={spokenWords}
+            speaking={speaking}
+          />
         </IonCard>
       </IonCol>
       {/* Splitted into 2-columns TrainerControlPanel */}

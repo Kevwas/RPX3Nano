@@ -1,16 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
   IonCard,
+  IonCardSubtitle,
 } from "@ionic/react";
 import CardsContext, { Step } from "../../data/cards-context";
 
 const TrainerVisualPanel: React.FC<{
   stepsStack: Step[];
-}> = ({ stepsStack }) => {
+  speakingWord: string;
+  spokenWords: string[];
+  speaking: boolean;
+}> = ({ stepsStack, speakingWord, spokenWords, speaking }) => {
   const cardsCtx = useContext(CardsContext);
+  const isLast = (step) => stepsStack.indexOf(step) + 1 === stepsStack.length;
+  // useEffect(() => {spokenWords.shift()}, [spokenWords]);
+
   return (
     <>
       <IonCardHeader>
@@ -18,10 +25,11 @@ const TrainerVisualPanel: React.FC<{
       </IonCardHeader>
       <IonCardContent>
         <IonCardTitle>{cardsCtx.selectedCard.title}</IonCardTitle>
+        <IonCardSubtitle>Speaking word: {speakingWord}</IonCardSubtitle>
       </IonCardContent>
       <div
         style={{
-          height: '100%',
+          height: "100%",
           width: "100%",
           marginTop: 10,
         }}
@@ -29,7 +37,19 @@ const TrainerVisualPanel: React.FC<{
       >
         {stepsStack.map((step) => (
           <IonCard id={Math.random().toString() + step.id}>
-            <IonCardContent>{step.text}</IonCardContent>
+            {isLast(step) ? (
+              <IonCardContent>
+                {spokenWords.length > 0 ? (
+                  <span style={{ backgroundColor: "yellow", color: "blue" }}>
+                    {spokenWords.join(" ")}
+                  </span>
+                ) : (
+                  step.text
+                )}
+              </IonCardContent>
+            ) : (
+              <IonCardContent>{step.text}</IonCardContent>
+            )}
           </IonCard>
         ))}
       </div>
