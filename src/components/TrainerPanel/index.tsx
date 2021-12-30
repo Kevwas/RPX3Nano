@@ -4,23 +4,57 @@ import TrainerVisualPanel from "./TrainerVisualPanel";
 import TrainerControlPanel from "./TrainerControlPanel";
 import CardsContext, { Step } from "../../data/cards-context";
 import { useSpeechSynthesis } from "react-speech-kit";
+import { SplittedText } from "../../data/types";
 
-const getWordAt = (str: string, pos: number) => {
+
+// const getWordAt = (str: string, pos: number) => {
+//   // Perform type conversions.
+//   str = String(str);
+//   pos = Number(pos) >>> 0;
+
+//   // Search for the word's beginning and end.
+//   const left = str.slice(0, pos + 1).search(/\S+$/),
+//     right = str.slice(pos).search(/\s/);
+
+//   // The last word in the string is a special case.
+//   if (right < 0) {
+//     return str.slice(left);
+//   }
+
+//   // Return the word, using the located bounds to extract it from the string.
+//   return str.slice(left, right + pos);
+// };
+
+const splitText = (
+  str: string,
+  pos: number,
+): SplittedText => {
   // Perform type conversions.
   str = String(str);
   pos = Number(pos) >>> 0;
-  
+
   // Search for the word's beginning and end.
   const left = str.slice(0, pos + 1).search(/\S+$/),
-  right = str.slice(pos).search(/\s/);
-  
+    right = str.slice(pos).search(/\s/);
+
+  const leftText = str.slice(0, pos);
+  const speakingWord = str.slice(left, right + pos);
+  const rightText = str.slice(pos + speakingWord.length);
+
   // The last word in the string is a special case.
   if (right < 0) {
-    return str.slice(left);
+    return {
+      left: leftText,
+      speakingWord: rightText,
+      right: null,
+    };
   }
 
-  // Return the word, using the located bounds to extract it from the string.
-  return str.slice(left, right + pos);
+  return {
+    left: leftText,
+    speakingWord,
+    right: rightText,
+  };
 };
 
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
@@ -28,33 +62,26 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
 }) => {
   const cardsCtx = useContext(CardsContext);
   const { selectedCard, cards, updateSelectedCard } = cardsCtx;
-  const [speakingWord, setSpeakingWord] = useState<string>("");
-  const [spokenWords, setSpokenWords] = useState<string[]>([]);
+  const [splittedText, setSplittedText] = useState<SplittedText | null>(null);
 
   const voiceIndex = useRef<number | null>(null);
   const unlockMasteryFeedback = useRef<boolean>(false);
-  
+
   const stepsQueu = useRef<Step[] | []>([...selectedCard.steps]);
   const [stepsStack, setStepsStack] = useState<Step[]>([]);
 
-  const { voices, cancel, speaking } = useSpeechSynthesis();
-  
+  const { voices, cancel } = useSpeechSynthesis();
+
   const utterance = new SpeechSynthesisUtterance();
 
   utterance.onboundary = (event) => {
     const stepsStackCopy = [...stepsStack];
     const text = stepsStackCopy.pop()!.text;
-    const word = getWordAt(text, event.charIndex);
-
-    console.log(word);
-
-    setSpeakingWord(word);
-    setSpokenWords((prevWords) => [...prevWords, word]);
+    setSplittedText(splitText(text, event.charIndex));
   };
 
   utterance.onend = () => {
-    setSpeakingWord("");
-    setSpokenWords([]);
+    setSplittedText(null);
   };
 
   const voice: SpeechSynthesisVoice | null = voices[voiceIndex.current] || null;
@@ -78,7 +105,6 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   };
 
   const addStepToStepsStack = () => {
-    
     // Then, update the selectedCard to be the next card on the cards array
     // And, add the first step of the new card to the stepsStack
     // And, add the rest of the steps of the cards to the stepsQueu
@@ -86,25 +112,28 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     cancel(); // Stop TTS
 
     if (stepsQueu.current.length === 1) {
-    // Unlock the feedback buttons:
-    unlockMasteryFeedback.current = true;
+      // Unlock the feedback buttons:
+      unlockMasteryFeedback.current = true;
     } else {
       // Lock the feedback buttons:
       unlockMasteryFeedback.current = false;
     }
 
-    if (stepsQueu.current.length === 0) { // If there is no more steps on the stepsQueu array:
+    if (stepsQueu.current.length === 0) {
+      // If there is no more steps on the stepsQueu array:
       const indexOfCurrentCard = cards.findIndex(
         (card) => card.id === selectedCard.id
       );
 
       // console.log('Index of Current card: ', indexOfCurrentCard);
-      if (!!cards[indexOfCurrentCard + 1]) { // If there are cards remaining on the cards array:
+      if (!!cards[indexOfCurrentCard + 1]) {
+        // If there are cards remaining on the cards array:
         const newCard = cards[indexOfCurrentCard + 1];
         updateSelectedCard(newCard); // Update the selectedCard to be the next card on the cards array
         setStepsStack([newCard.steps[0]]); // Reset the steps stacks to contain the first step of the just updated card
         stepsQueu.current = newCard.steps.slice(1);
-      } else { // If the are no more cards:
+      } else {
+        // If the are no more cards:
         // Training done logic:
         showConfetti();
         // Then, set the selected card to be the first card of the cards array
@@ -112,7 +141,8 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
         setStepsStack([cards[0].steps[0]]);
         stepsQueu.current = cards[0].steps.slice(1);
       }
-    } else { // If there are steps remaining in the stepsQueu array
+    } else {
+      // If there are steps remaining in the stepsQueu array
       const stepsStackCopy = [...stepsStack];
       const stepsQueuCopy = [...stepsQueu.current];
 
@@ -212,9 +242,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
         <IonCard className="ion-card-section">
           <TrainerVisualPanel
             stepsStack={stepsStack}
-            speakingWord={speakingWord}
-            spokenWords={spokenWords}
-            speaking={speaking}
+            splittedText={splittedText}
           />
         </IonCard>
       </IonCol>

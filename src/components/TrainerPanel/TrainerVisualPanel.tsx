@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import {
   IonCardHeader,
   IonCardTitle,
@@ -7,16 +7,14 @@ import {
   IonCardSubtitle,
 } from "@ionic/react";
 import CardsContext, { Step } from "../../data/cards-context";
+import { SplittedText } from "../../data/types";
 
 const TrainerVisualPanel: React.FC<{
   stepsStack: Step[];
-  speakingWord: string;
-  spokenWords: string[];
-  speaking: boolean;
-}> = ({ stepsStack, speakingWord, spokenWords, speaking }) => {
+  splittedText: SplittedText | null;
+}> = ({ stepsStack, splittedText }) => {
   const cardsCtx = useContext(CardsContext);
-  const isLast = (step) => stepsStack.indexOf(step) + 1 === stepsStack.length;
-  // useEffect(() => {spokenWords.shift()}, [spokenWords]);
+  const isLast = (step: Step) => stepsStack.indexOf(step) + 1 === stepsStack.length;
 
   return (
     <>
@@ -25,7 +23,7 @@ const TrainerVisualPanel: React.FC<{
       </IonCardHeader>
       <IonCardContent>
         <IonCardTitle>{cardsCtx.selectedCard.title}</IonCardTitle>
-        <IonCardSubtitle>Speaking word: {speakingWord}</IonCardSubtitle>
+        <IonCardSubtitle>Speaking word: {splittedText && splittedText.speakingWord}</IonCardSubtitle>
       </IonCardContent>
       <div
         style={{
@@ -37,15 +35,13 @@ const TrainerVisualPanel: React.FC<{
       >
         {stepsStack.map((step) => (
           <IonCard id={Math.random().toString() + step.id}>
-            {isLast(step) ? (
+            {isLast(step) && splittedText ? (
               <IonCardContent>
-                {spokenWords.length > 0 ? (
-                  <span style={{ backgroundColor: "yellow", color: "blue" }}>
-                    {spokenWords.join(" ")}
-                  </span>
-                ) : (
-                  step.text
-                )}
+                {splittedText.left}
+                <span style={{ backgroundColor: "yellow", color: "blue" }}>
+                  {splittedText.speakingWord}
+                </span>
+                {splittedText.right}
               </IonCardContent>
             ) : (
               <IonCardContent>{step.text}</IonCardContent>
