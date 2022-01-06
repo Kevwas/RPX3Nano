@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  IonButton,
   IonItem,
   IonLabel,
   IonListHeader,
@@ -9,7 +8,7 @@ import {
   IonSelectOption,
   IonToggle,
 } from "@ionic/react";
-import { Card } from "../../../data/cards-context";
+
 
 const songs = [
   {
@@ -31,11 +30,10 @@ const songs = [
     id: "song04",
     name: "Relaxing Baby Lullaby",
     url: "https://ia902806.us.archive.org/34/items/relaxingbabylullabysleepmusic/Relaxing%20Baby%20Lullaby%20Sleep%20Music.mp3",
-  }
+  },
 ];
 
 const TrainingSessionSetup: React.FC<{
-  selectedCard: Card;
   ttsON: boolean;
   voices: SpeechSynthesisVoice[];
   voiceIndex: number | null;
@@ -48,7 +46,6 @@ const TrainingSessionSetup: React.FC<{
   updateRate: (value: number) => void;
   updatePitch: (value: number) => void;
 }> = ({
-  selectedCard,
   ttsON,
   voices,
   voiceIndex,
@@ -68,7 +65,7 @@ const TrainingSessionSetup: React.FC<{
       <IonListHeader>
         <h6 style={{ color: "#a0a0a0" }}>Training session setup</h6>
       </IonListHeader>
-      
+
       <IonItem className="dropdown-selector">
         Voice:
         <IonSelect
@@ -86,36 +83,62 @@ const TrainingSessionSetup: React.FC<{
       </IonItem>
       <IonItem className="dropdown-selector">
         <IonLabel>Voice Volume:</IonLabel>
-        <IonRange value={volume} min={0} max={1} step={0.1} onIonChange={e => updateVolume(e.detail.value as number)}/>
+        <IonRange
+          value={volume}
+          min={0}
+          max={1}
+          step={0.1}
+          onIonChange={(e) => updateVolume(e.detail.value as number)}
+        />
       </IonItem>
       <IonItem className="dropdown-selector">
         <IonLabel>Voice Rate:</IonLabel>
-        <IonRange value={rate} min={0} max={1} step={0.1} onIonChange={e => updateRate(e.detail.value as number)}/>
+        <IonRange
+          value={rate}
+          min={0}
+          max={1}
+          step={0.1}
+          onIonChange={(e) => updateRate(e.detail.value as number)}
+        />
       </IonItem>
       <IonItem className="dropdown-selector">
         <IonLabel>Voice Pitch:</IonLabel>
-        <IonRange value={pitch} min={0} max={2} step={0.1} onIonChange={e => updatePitch(e.detail.value as number)}/>
+        <IonRange
+          value={pitch}
+          min={0}
+          max={2}
+          step={0.1}
+          onIonChange={(e) => updatePitch(e.detail.value as number)}
+        />
       </IonItem>
       <IonItem>
         <IonLabel>Card count to practice : .. 4</IonLabel>
       </IonItem>
       <IonItem>
-        <IonLabel>Text to speech audio:   <span style={{color: '#aaa'}}>ON / OFF</span></IonLabel>
-        <IonToggle slot="end" name="audio" color="success" checked={ttsON} onIonChange={e => toggleTts()} />
+        <IonLabel>
+          Text to speech audio: <span style={{ color: "#aaa" }}>ON / OFF</span>
+        </IonLabel>
+        <IonToggle
+          slot="end"
+          name="audio"
+          color="success"
+          checked={ttsON}
+          onIonChange={(e) => toggleTts()}
+        />
       </IonItem>
-      {/* <IonItem>
-        <IonLabel>Music audio</IonLabel>
-        <IonToggle slot="end" name="audio" color="success" checked />
-      </IonItem> */}
       <IonItem className="dropdown-selector">
         Music song:
-        <IonSelect interface={"action-sheet"} value={songs.indexOf(selectedSong).toString()} name="music" onIonChange={e => setSelectedSong(songs[e.detail.value])}>
-        {/* <IonSelect value="0" name="music" onIonChange={e => console.log(e.detail.value)}> */}
-          {
-            songs.map((song, idx) =>
-              <IonSelectOption id={song.id} value={idx.toString()}>{song.name}</IonSelectOption>
-            )
-          }
+        <IonSelect
+          interface={"action-sheet"}
+          value={songs.indexOf(selectedSong).toString()}
+          name="music"
+          onIonChange={(e) => setSelectedSong(songs[e.detail.value])}
+        >
+          {songs.map((song, idx) => (
+            <IonSelectOption id={song.id} value={idx.toString()}>
+              {song.name}
+            </IonSelectOption>
+          ))}
         </IonSelect>
       </IonItem>
       <div
@@ -126,16 +149,13 @@ const TrainingSessionSetup: React.FC<{
           justifyContent: "center",
         }}
       >
-        <audio
-          controls
-          src={selectedSong.url}
-        >
+        <audio controls src={selectedSong.url}>
           Your browser does not support the
           <code>audio</code> element.
         </audio>
       </div>
     </>
-  )
+  );
 };
 
 export default TrainingSessionSetup;

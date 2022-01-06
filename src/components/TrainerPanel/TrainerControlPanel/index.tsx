@@ -8,41 +8,38 @@ import React, { MutableRefObject } from "react";
 import TrainingSessionSetup from "./TrainingSessionSetup";
 import TrainingSessionNavigation from "./TrainingSessionNavigation";
 import MasteryFeedback from "./MasteryFeedback";
-import { Card } from "../../../data/cards-context";
 
 const TrainerControlPanel: React.FC<{
-  selectedCard: Card;
   unlockMasteryFeedback: MutableRefObject<boolean>;
+  addStepToStepsStack: () => void;
+  removeStepFromStepsStack: () => void;
+  nextCard: () => void;
+  previousCard: () => void;
+  reStartTraining: () => void;
   ttsON: boolean;
   voices: SpeechSynthesisVoice[];
   voiceIndex: number | null;
   volume: number;
   rate: number;
   pitch: number;
-  addStepToStepsStack: () => void;
-  removeStepFromStepsStack: () => void;
-  nextCard: () => void;
-  previousCard: () => void;
-  reStartTraining: () => void;
   toggleTts: () => void;
   updateVoiceIndex: (value: number) => void;
   updateVolume: (value: number) => void;
   updateRate: (value: number) => void;
   updatePitch: (value: number) => void;
 }> = ({
-  selectedCard,
   unlockMasteryFeedback,
+  addStepToStepsStack,
+  removeStepFromStepsStack,
+  nextCard,
+  previousCard,
+  reStartTraining,
   ttsON,
   voices,
   voiceIndex,
   volume,
   rate,
   pitch,
-  addStepToStepsStack,
-  removeStepFromStepsStack,
-  nextCard,
-  previousCard,
-  reStartTraining,
   toggleTts,
   updateVoiceIndex,
   updateVolume,
@@ -63,12 +60,10 @@ const TrainerControlPanel: React.FC<{
           reStartTraining={reStartTraining}
         />
         <MasteryFeedback unlockMasteryFeedback={unlockMasteryFeedback} />
-        <TrainingSessionSetup
-          selectedCard={selectedCard}
+        <TrainingSessionSetup 
+          ttsON={ttsON}
           voices={voices}
           voiceIndex={voiceIndex}
-          updateVoiceIndex={updateVoiceIndex}
-          ttsON={ttsON}
           volume={volume}
           rate={rate}
           pitch={pitch}
@@ -76,6 +71,7 @@ const TrainerControlPanel: React.FC<{
           updateVolume={updateVolume}
           updateRate={updateRate}
           updatePitch={updatePitch}
+          updateVoiceIndex={updateVoiceIndex}
         />
       </IonList>
     </IonCardContent>

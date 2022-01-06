@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CardsContext, { Card, Step, Stage, Difficulty } from "./cards-context";
 import jsonDB from "./db.json";
 import { Storage } from "@capacitor/storage";
@@ -12,8 +12,8 @@ const CardsContextProvider: React.FC = (props) => {
     userInterval: 0.25
 }]);
   const [selectedCard, set_SelectedCard] = useState<Card>(cards[0]);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const toggleIsEditing = (bool: boolean) => setIsEditing(bool);
+  const isEditing = useRef<boolean>(false);
+  const toggleIsEditing = (bool: boolean) => isEditing.current = bool;
 
   useEffect(() => {
     // Retrieving data from localStorage once the app inits:
@@ -196,7 +196,7 @@ const CardsContextProvider: React.FC = (props) => {
   return (
     <CardsContext.Provider
       value={{
-        isEditing,
+        isEditing: isEditing.current,
         toggleIsEditing,
         cards,
         selectedCard,

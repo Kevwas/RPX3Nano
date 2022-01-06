@@ -4,7 +4,7 @@ import TrainerVisualPanel from "./TrainerVisualPanel";
 import TrainerControlPanel from "./TrainerControlPanel";
 import CardsContext, { Step } from "../../data/cards-context";
 import { SplittedText } from "../../data/types";
-
+import useTTS from "../../hooks/useTTS";
 
 // const getWordAt = (str: string, pos: number) => {
 //   // Perform type conversions.
@@ -24,38 +24,6 @@ import { SplittedText } from "../../data/types";
 //   return str.slice(left, right + pos);
 // };
 
-const splitText = (
-  str: string,
-  pos: number,
-): SplittedText => {
-  // Perform type conversions.
-  str = String(str);
-  pos = Number(pos) >>> 0;
-
-  // Search for the word's beginning and end.
-  const left = str.slice(0, pos + 1).search(/\S+$/),
-    right = str.slice(pos).search(/\s/);
-
-  const leftText = str.slice(0, pos);
-  const speakingWord = str.slice(left, right + pos);
-  const rightText = str.slice(pos + speakingWord.length);
-
-  // The last word in the string is a special case.
-  if (right < 0) {
-    return {
-      left: leftText,
-      speakingWord: rightText,
-      right: null,
-    };
-  }
-
-  return {
-    left: leftText,
-    speakingWord,
-    right: rightText,
-  };
-};
-
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
 }) => {
@@ -64,55 +32,74 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   const [splittedText, setSplittedText] = useState<SplittedText | null>(null);
 
   const unlockMasteryFeedback = useRef<boolean>(false);
-  
+
   const stepsQueu = useRef<Step[] | []>([...selectedCard.steps]);
   const [stepsStack, setStepsStack] = useState<Step[]>([]);
-  
-  
-  const [ttsON, setTtsON] = useState<boolean>(true);
-  const toggleTts = () => setTtsON(!ttsON);
-  const [volume, setVolume] = useState<number>(1);
-  const updateVolume = (value: number) => {
-    console.log('Updating volume...');
-    setVolume(value);
-  };
-  const [rate, setRate] = useState<number>(0.7);
-  const updateRate = (value: number) => setRate(value);
-  const [pitch, setPitch] = useState<number>(1.5);
-  const updatePitch = (value: number) => setPitch(value);
 
-  const voiceIndex = useRef<number>(0);
-  // const { voices, cancel } = useSpeechSynthesis();
-  const voices = speechSynthesis.getVoices();
-  const cancel = () => speechSynthesis.cancel();
-  const voice: SpeechSynthesisVoice | null = voices[voiceIndex.current] || null;
-  const updateVoiceIndex = (value: number) => {
-    voiceIndex.current = value;
-  };
-
-  const utterance = new SpeechSynthesisUtterance();
-  utterance.onboundary = (event) => {
-    const stepsStackCopy = [...stepsStack];
-    const text = stepsStackCopy.pop()!.text;
-    setSplittedText(splitText(text, event.charIndex));
-  };
-  utterance.onend = () => {
-    setSplittedText(null);
-  };
+  const {
+    ttsON,
+    speak,
+    cancel,
+    onBoundary,
+    onEnd,
+    voices,
+    voiceIndex,
+    volume,
+    rate,
+    pitch,
+    toggleTts,
+    updateVoiceIndex,
+    updateVolume,
+    updateRate,
+    updatePitch,
+  } = useTTS();
 
   useEffect(() => {
     if (ttsON) {
+      const splitText = (str: string, pos: number): SplittedText => {
+        // Perform type conversions.
+        str = String(str);
+        pos = Number(pos) >>> 0;
+      
+        // Search for the word's beginning and end.
+        const left = str.slice(0, pos + 1).search(/\S+$/),
+          right = str.slice(pos).search(/\s/);
+      
+        const leftText = str.slice(0, pos);
+        const speakingWord = str.slice(left, right + pos);
+        const rightText = str.slice(pos + speakingWord.length);
+      
+        // The last word in the string is a special case.
+        if (right < 0) {
+          return {
+            left: leftText,
+            speakingWord: rightText,
+            right: null,
+          };
+        }
+      
+        return {
+          left: leftText,
+          speakingWord,
+          right: rightText,
+        };
+      };
+
+      onBoundary((event) => {
+        const stepsStackCopy = [...stepsStack];
+        const text = stepsStackCopy.pop()!.text;
+        setSplittedText(splitText(text, event.charIndex));
+      });
+    
+      onEnd(() => {
+        setSplittedText(null);
+      });
+
       if (stepsStack.length > 0) {
         const stepsStackCopy = [...stepsStack];
         const text = stepsStackCopy.pop()!.text;
-  
-        utterance.text = text;
-        utterance.voice = voice;
-        utterance.volume = volume;
-        utterance.rate = rate;
-        utterance.pitch = pitch;
-  
-        speechSynthesis.speak(utterance);
+
+        speak(text);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -242,14 +229,6 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     }
   };
 
-  // useEffect(() => {
-  //   console.log('cards: ', cards);
-  //   console.log('Steps Stack: ', stepsStack);
-  //   console.log('Steps Queu: ', stepsQueu);
-  //   console.log('SelectedCard: ', selectedCard);
-  //   console.log('__________________________');
-  // }, [selectedCard, stepsStack])
-
   return (
     <>
       <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
@@ -264,17 +243,15 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
       <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
         <IonCard className="ion-card-section">
           <TrainerControlPanel
-            selectedCard={selectedCard}
             addStepToStepsStack={addStepToStepsStack}
             removeStepFromStepsStack={removeStepFromStepsStack}
             nextCard={nextCard}
             previousCard={previousCard}
             reStartTraining={reStartTraining}
-            voices={voices}
-            voiceIndex={voiceIndex.current}
-            updateVoiceIndex={updateVoiceIndex}
             unlockMasteryFeedback={unlockMasteryFeedback}
             ttsON={ttsON}
+            voices={voices}
+            voiceIndex={voiceIndex}
             volume={volume}
             rate={rate}
             pitch={pitch}
@@ -282,6 +259,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
             updateVolume={updateVolume}
             updateRate={updateRate}
             updatePitch={updatePitch}
+            updateVoiceIndex={updateVoiceIndex}
           />
         </IonCard>
       </IonCol>
