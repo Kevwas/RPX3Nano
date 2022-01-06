@@ -4,16 +4,19 @@ import {
   IonCardContent,
   IonItem,
   useIonAlert,
+  useIonToast,
 } from "@ionic/react";
 import CardsContext from "../../data/cards-context";
 
 const CardActionController: React.FC = () => {
   const { deleteCard, duplicateCard, selectedCard } = useContext(CardsContext);
   const [ionAlert] = useIonAlert();
+  const [present] = useIonToast();
 
   const actionCardHandler = (action: "duplicate" | "delete" ) => {
     const deleteSelectedCard = () => {
       deleteCard(selectedCard.id);
+      present(`Card ${selectedCard.title} deleted.`, 2000);
     };
     switch(action) {
       case "delete":
@@ -29,6 +32,7 @@ const CardActionController: React.FC = () => {
         break;
       case "duplicate":
         duplicateCard(selectedCard);
+        present(`Card ${selectedCard.title} duplicated.`, 2000);
         break;
       default:
         return;

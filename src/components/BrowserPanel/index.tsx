@@ -9,6 +9,7 @@ import {
   IonButton,
   IonInput,
   IonLabel,
+  useIonToast,
 } from "@ionic/react";
 import CardsContext, { Card } from "../../data/cards-context";
 import CardsSection from "./CardsSection";
@@ -23,6 +24,7 @@ const BrowserPanel: React.FC<{
   const { addCard, toggleIsEditing } = useContext(CardsContext);
   const [showModal, setShowModal] = useState<boolean>(false);
   const titleRef = useRef<HTMLIonInputElement>(null);
+  const [present] = useIonToast();
 
   const addNewCardHandler = () => {
     const enteredTitle = titleRef.current?.value;
@@ -35,6 +37,7 @@ const BrowserPanel: React.FC<{
     addCard(enteredTitle.toString(), "comon");
     toggleIsEditing(false);
     setShowModal(false);
+    present(`Card ${enteredTitle.toString()} added.`, 2000);
   };
 
   return (
