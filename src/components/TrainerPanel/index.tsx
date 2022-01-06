@@ -3,7 +3,6 @@ import { IonCard, IonCol } from "@ionic/react";
 import TrainerVisualPanel from "./TrainerVisualPanel";
 import TrainerControlPanel from "./TrainerControlPanel";
 import CardsContext, { Step } from "../../data/cards-context";
-import { useSpeechSynthesis } from "react-speech-kit";
 import { SplittedText } from "../../data/types";
 
 
@@ -61,48 +60,63 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
 }) => {
   const cardsCtx = useContext(CardsContext);
-  const { selectedCard, cards, updateSelectedCard } = cardsCtx;
+  const { selectedCard, cards, setSelectedCard } = cardsCtx;
   const [splittedText, setSplittedText] = useState<SplittedText | null>(null);
 
-  const voiceIndex = useRef<number | null>(null);
   const unlockMasteryFeedback = useRef<boolean>(false);
-
+  
   const stepsQueu = useRef<Step[] | []>([...selectedCard.steps]);
   const [stepsStack, setStepsStack] = useState<Step[]>([]);
+  
+  
+  const [ttsON, setTtsON] = useState<boolean>(true);
+  const toggleTts = () => setTtsON(!ttsON);
+  const [volume, setVolume] = useState<number>(1);
+  const updateVolume = (value: number) => {
+    console.log('Updating volume...');
+    setVolume(value);
+  };
+  const [rate, setRate] = useState<number>(0.7);
+  const updateRate = (value: number) => setRate(value);
+  const [pitch, setPitch] = useState<number>(1.5);
+  const updatePitch = (value: number) => setPitch(value);
 
-  const { voices, cancel } = useSpeechSynthesis();
+  const voiceIndex = useRef<number>(0);
+  // const { voices, cancel } = useSpeechSynthesis();
+  const voices = speechSynthesis.getVoices();
+  const cancel = () => speechSynthesis.cancel();
+  const voice: SpeechSynthesisVoice | null = voices[voiceIndex.current] || null;
+  const updateVoiceIndex = (value: number) => {
+    voiceIndex.current = value;
+  };
 
   const utterance = new SpeechSynthesisUtterance();
-
   utterance.onboundary = (event) => {
     const stepsStackCopy = [...stepsStack];
     const text = stepsStackCopy.pop()!.text;
     setSplittedText(splitText(text, event.charIndex));
   };
-
   utterance.onend = () => {
     setSplittedText(null);
   };
 
-  const voice: SpeechSynthesisVoice | null = voices[voiceIndex.current] || null;
-
   useEffect(() => {
-    if (stepsStack.length > 0) {
-      const stepsStackCopy = [...stepsStack];
-      const text = stepsStackCopy.pop()!.text;
-
-      utterance.text = text;
-      utterance.voice = voice;
-      utterance.rate = 0.7;
-
-      speechSynthesis.speak(utterance);
+    if (ttsON) {
+      if (stepsStack.length > 0) {
+        const stepsStackCopy = [...stepsStack];
+        const text = stepsStackCopy.pop()!.text;
+  
+        utterance.text = text;
+        utterance.voice = voice;
+        utterance.volume = volume;
+        utterance.rate = rate;
+        utterance.pitch = pitch;
+  
+        speechSynthesis.speak(utterance);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stepsStack]);
-
-  const updateVoiceIndex = (value: number) => {
-    voiceIndex.current = value;
-  };
 
   const addStepToStepsStack = () => {
     // Then, update the selectedCard to be the next card on the cards array
@@ -129,7 +143,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
       if (!!cards[indexOfCurrentCard + 1]) {
         // If there are cards remaining on the cards array:
         const newCard = cards[indexOfCurrentCard + 1];
-        updateSelectedCard(newCard); // Update the selectedCard to be the next card on the cards array
+        setSelectedCard(newCard); // Update the selectedCard to be the next card on the cards array
         setStepsStack([newCard.steps[0]]); // Reset the steps stacks to contain the first step of the just updated card
         stepsQueu.current = newCard.steps.slice(1);
       } else {
@@ -137,7 +151,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
         // Training done logic:
         showConfetti();
         // Then, set the selected card to be the first card of the cards array
-        updateSelectedCard(cards[0]);
+        setSelectedCard(cards[0]);
         setStepsStack([cards[0].steps[0]]);
         stepsQueu.current = cards[0].steps.slice(1);
       }
@@ -165,7 +179,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
       );
       if (!!cards[indexOfCurrentCard - 1]) {
         const newCard = cards[indexOfCurrentCard - 1];
-        updateSelectedCard(newCard);
+        setSelectedCard(newCard);
         setStepsStack([newCard.steps[0]]);
         stepsQueu.current = newCard.steps.slice(1);
       }
@@ -189,7 +203,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     // setStepsQueu(selectedCard.steps.slice(1));
 
     // Reset from first card
-    updateSelectedCard(cards[0]);
+    setSelectedCard(cards[0]);
     setStepsStack([cards[0].steps[0]]);
     stepsQueu.current = cards[0].steps.slice(1);
   };
@@ -203,11 +217,11 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     );
     const next_card = cards[indexOfCurrentCard + 1];
     if (!!next_card) {
-      updateSelectedCard(next_card);
+      setSelectedCard(next_card);
       setStepsStack([next_card.steps[0]]);
       stepsQueu.current = next_card.steps.slice(1);
     } else {
-      updateSelectedCard(cards[0]);
+      setSelectedCard(cards[0]);
       setStepsStack([cards[0].steps[0]]);
       stepsQueu.current = cards[0].steps.slice(1);
     }
@@ -222,7 +236,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     );
     const previous_card = cards[indexOfCurrentCard - 1];
     if (!!previous_card) {
-      updateSelectedCard(previous_card);
+      setSelectedCard(previous_card);
       setStepsStack([previous_card.steps[0]]);
       stepsQueu.current = previous_card.steps.slice(1);
     }
@@ -260,6 +274,14 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
             voiceIndex={voiceIndex.current}
             updateVoiceIndex={updateVoiceIndex}
             unlockMasteryFeedback={unlockMasteryFeedback}
+            ttsON={ttsON}
+            volume={volume}
+            rate={rate}
+            pitch={pitch}
+            toggleTts={toggleTts}
+            updateVolume={updateVolume}
+            updateRate={updateRate}
+            updatePitch={updatePitch}
           />
         </IonCard>
       </IonCol>

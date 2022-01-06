@@ -22,19 +22,25 @@ export interface Card {
 }
 
 interface CardContext {
+    isEditing: boolean;
     cards: Card[];
     selectedCard: Card;
-    updateSelectedCard: (card: Card) => void;
+    toggleIsEditing: (bool: boolean) => void;
+    setSelectedCard: (card: Card) => void;
     addCard: (title: string, stage: Stage) => void;
+    duplicateCard: (duplicatedCard: Card) => void;
+    deleteCard: (cardId: string) => void;
+    updateTitle: (cardId: string, newTitle: string) => void;
+    updateStage: (cardId: string, newStage: Stage) => void;
+    updateUserInterval: (cardId: string, difficulty: Difficulty) => void;
     addStep: (cardId: string, stepText: string) => void;
     deleteStep: (cardId: string, steplId: string) => void;
     updateStep: (cardId: string, steplId: string, newText: string) => void;
-    updateStage: (cardId: string, newStage: Stage) => void;
-    updateUserInterval: (cardId: string, difficulty: Difficulty) => void;
 }
 
 const CardsContext = React.createContext<CardContext>(
     {
+        isEditing: false,
         cards: [],
         selectedCard: {
             id: '',
@@ -43,13 +49,17 @@ const CardsContext = React.createContext<CardContext>(
             steps: [],
             userInterval: 0.25
         },
-        updateSelectedCard: () => { },
+        toggleIsEditing: () => { },
+        setSelectedCard: () => { },
         addCard: () => { },
+        duplicateCard: () => { },
+        deleteCard: () => { },
+        updateTitle: () => { },
+        updateStage: () => { },
+        updateUserInterval: () => { },
         addStep: () => { },
         deleteStep: () => { },
         updateStep: () => { },
-        updateStage: () => { },
-        updateUserInterval: () => { },
     }
 );
 

@@ -11,27 +11,43 @@ import MasteryFeedback from "./MasteryFeedback";
 import { Card } from "../../../data/cards-context";
 
 const TrainerControlPanel: React.FC<{
-  voices: SpeechSynthesisVoice[];
-  voiceIndex: number | null;
   selectedCard: Card;
   unlockMasteryFeedback: MutableRefObject<boolean>;
-  updateVoiceIndex: (value: number) => void;
+  ttsON: boolean;
+  voices: SpeechSynthesisVoice[];
+  voiceIndex: number | null;
+  volume: number;
+  rate: number;
+  pitch: number;
   addStepToStepsStack: () => void;
   removeStepFromStepsStack: () => void;
   nextCard: () => void;
   previousCard: () => void;
   reStartTraining: () => void;
+  toggleTts: () => void;
+  updateVoiceIndex: (value: number) => void;
+  updateVolume: (value: number) => void;
+  updateRate: (value: number) => void;
+  updatePitch: (value: number) => void;
 }> = ({
-  voices,
-  voiceIndex,
   selectedCard,
   unlockMasteryFeedback,
-  updateVoiceIndex,
+  ttsON,
+  voices,
+  voiceIndex,
+  volume,
+  rate,
+  pitch,
   addStepToStepsStack,
   removeStepFromStepsStack,
   nextCard,
   previousCard,
   reStartTraining,
+  toggleTts,
+  updateVoiceIndex,
+  updateVolume,
+  updateRate,
+  updatePitch,
 }) => (
   <>
     <IonCardHeader>
@@ -44,14 +60,22 @@ const TrainerControlPanel: React.FC<{
           removeStepFromStepsStack={removeStepFromStepsStack}
           nextCard={nextCard}
           previousCard={previousCard}
+          reStartTraining={reStartTraining}
         />
         <MasteryFeedback unlockMasteryFeedback={unlockMasteryFeedback} />
         <TrainingSessionSetup
           selectedCard={selectedCard}
-          reStartTraining={reStartTraining}
           voices={voices}
           voiceIndex={voiceIndex}
           updateVoiceIndex={updateVoiceIndex}
+          ttsON={ttsON}
+          volume={volume}
+          rate={rate}
+          pitch={pitch}
+          toggleTts={toggleTts}
+          updateVolume={updateVolume}
+          updateRate={updateRate}
+          updatePitch={updatePitch}
         />
       </IonList>
     </IonCardContent>

@@ -4,6 +4,7 @@ import {
   IonItem,
   IonLabel,
   IonListHeader,
+  IonRange,
   IonSelect,
   IonSelectOption,
   IonToggle,
@@ -34,17 +35,31 @@ const songs = [
 ];
 
 const TrainingSessionSetup: React.FC<{
+  selectedCard: Card;
+  ttsON: boolean;
   voices: SpeechSynthesisVoice[];
   voiceIndex: number | null;
-  selectedCard: Card;
+  volume: number;
+  rate: number;
+  pitch: number;
+  toggleTts: () => void;
   updateVoiceIndex: (value: number) => void;
-  reStartTraining: () => void;
+  updateVolume: (value: number) => void;
+  updateRate: (value: number) => void;
+  updatePitch: (value: number) => void;
 }> = ({
   selectedCard,
+  ttsON,
   voices,
   voiceIndex,
+  volume,
+  rate,
+  pitch,
+  toggleTts,
   updateVoiceIndex,
-  reStartTraining,
+  updateVolume,
+  updateRate,
+  updatePitch,
 }) => {
   const [selectedSong, setSelectedSong] = useState(songs[0]);
 
@@ -53,22 +68,13 @@ const TrainingSessionSetup: React.FC<{
       <IonListHeader>
         <h6 style={{ color: "#a0a0a0" }}>Training session setup</h6>
       </IonListHeader>
-      <div style={{ padding: 10 }}>
-        <IonButton
-          className="ion-button"
-          color="primary"
-          expand="block"
-          size="small"
-          onClick={reStartTraining}
-        >
-          re-start training
-        </IonButton>
-      </div>
+      
       <IonItem className="dropdown-selector">
-        <IonLabel>Voice:</IonLabel>
+        Voice:
         <IonSelect
           name="voice"
           value={voiceIndex || 0}
+          interface={"action-sheet"}
           onIonChange={(e) => updateVoiceIndex(e.detail.value)}
         >
           {voices.map((option, index) => (
@@ -78,20 +84,32 @@ const TrainingSessionSetup: React.FC<{
           ))}
         </IonSelect>
       </IonItem>
+      <IonItem className="dropdown-selector">
+        <IonLabel>Voice Volume:</IonLabel>
+        <IonRange value={volume} min={0} max={1} step={0.1} onIonChange={e => updateVolume(e.detail.value as number)}/>
+      </IonItem>
+      <IonItem className="dropdown-selector">
+        <IonLabel>Voice Rate:</IonLabel>
+        <IonRange value={rate} min={0} max={1} step={0.1} onIonChange={e => updateRate(e.detail.value as number)}/>
+      </IonItem>
+      <IonItem className="dropdown-selector">
+        <IonLabel>Voice Pitch:</IonLabel>
+        <IonRange value={pitch} min={0} max={2} step={0.1} onIonChange={e => updatePitch(e.detail.value as number)}/>
+      </IonItem>
       <IonItem>
         <IonLabel>Card count to practice : .. 4</IonLabel>
       </IonItem>
       <IonItem>
-        <IonLabel>Text to speech audio</IonLabel>
-        <IonToggle slot="end" name="audio" color="success" checked />
+        <IonLabel>Text to speech audio:   <span style={{color: '#aaa'}}>ON / OFF</span></IonLabel>
+        <IonToggle slot="end" name="audio" color="success" checked={ttsON} onIonChange={e => toggleTts()} />
       </IonItem>
       {/* <IonItem>
         <IonLabel>Music audio</IonLabel>
         <IonToggle slot="end" name="audio" color="success" checked />
       </IonItem> */}
       <IonItem className="dropdown-selector">
-        <IonLabel>Music song:</IonLabel>
-        <IonSelect value={songs.indexOf(selectedSong).toString()} name="music" onIonChange={e => setSelectedSong(songs[e.detail.value])}>
+        Music song:
+        <IonSelect interface={"action-sheet"} value={songs.indexOf(selectedSong).toString()} name="music" onIonChange={e => setSelectedSong(songs[e.detail.value])}>
         {/* <IonSelect value="0" name="music" onIonChange={e => console.log(e.detail.value)}> */}
           {
             songs.map((song, idx) =>

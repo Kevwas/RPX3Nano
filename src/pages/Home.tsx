@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   IonContent,
   IonPage,
@@ -14,7 +14,6 @@ import BrowserPanel from "../components/BrowserPanel";
 import EditorPanel from "../components/EditorPanel";
 import TrainerPanel from "../components/TrainerPanel";
 import Confetti from "../components/Confetti";
-import SaveStateButton from "../components/SaveStateButton";
 // import Swal from 'sweetalert2';
 // import withReactContent from 'sweetalert2-react-content';
 
@@ -26,7 +25,7 @@ import db from "../data/db.json";
 
 const Home: React.FC = () => {
   const user = JSON.parse(JSON.stringify(db)).user;
-  const cardsCtx = useContext(CardsContext);
+  const { cards } = useContext(CardsContext);
   const [confetti, setConfetti] = useState<boolean>(false);
 
   const showConfetti = () => {
@@ -38,31 +37,33 @@ const Home: React.FC = () => {
     }
   };
 
-  const startingCards = ((): Card[] => {
-    const cards = [...cardsCtx.cards!];
-    return [cards[0]];
+  const getStartingCards = ((): Card[] => {
+    const cardsCopy = [...cards!];
+    return [cardsCopy[0]];
   })();
+  const [startingCards, setStartingCards] = useState<Card[]>(getStartingCards);
 
-  const endingCards = ((): Card[] => {
-    const cards = [...cardsCtx.cards!];
-    return [cards.pop()!];
+  const getEndingCards = ((): Card[] => {
+    const cardsCopy = [...cards!];
+    return [cardsCopy.pop()!];
   })();
+  const [endingCards, setEndingCards] = useState<Card[]>(getEndingCards);
 
-  const comonCards = (() => {
-    const cards = [...cardsCtx.cards!];
-    cards.pop();
-    cards.shift();
+  const getComonCards = (() => {
+    const cardsCopy = [...cards!];
+    cardsCopy.pop();
+    cardsCopy.shift();
 
-    return cards;
+    return cardsCopy;
   })();
+  const [comonCards, setComonCards] = useState<Card[]>(getComonCards);
 
-  // const ShowCongratsAlert = () => (
-  //   MySwal.fire({
-  //     icon: 'success',
-  //     title: 'Good job!',
-  //     text: `You finished your training for the card: ${cardsCtx.selectedCard.title}!`,
-  //   })
-  // );
+  useEffect(() => {
+    setStartingCards(getStartingCards);
+    setEndingCards(getEndingCards);
+    setComonCards(getComonCards);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards]);
 
   return (
     <IonPage className="ion-page">

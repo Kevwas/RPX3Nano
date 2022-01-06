@@ -5,7 +5,7 @@ import {
   IonCardTitle,
   IonIcon,
   IonCardContent,
-  IonLabel,
+  IonItem,
 } from "@ionic/react";
 import { menu, close } from "ionicons/icons";
 import CardsContext from "../../data/cards-context";
@@ -35,15 +35,15 @@ const CardSteps: React.FC = () => {
 
   return (
     <div>
-      <IonLabel>Card Steps</IonLabel>
-      <div
-        style={{ maxHeight: 400, marginTop: 10, paddingRight: 20 }}
+      <IonItem>Card Steps</IonItem>
+      <IonCardContent
+        style={{ maxHeight: 400, minHeight: 200, marginTop: 10, paddingRight: 20 }}
         className="scroll"
       >
         {selectedCard.steps.map((step, idx) => (
           <CardComponent id={idx + Math.random().toString() + step.id} stepText={step.text} stepNumber={idx + 1} />
         ))}
-      </div>
+      </IonCardContent>
     </div>
   )
 };
