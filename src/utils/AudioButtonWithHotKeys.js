@@ -3,22 +3,21 @@ import {
   IonButton,
 } from "@ionic/react";
 
-function setHotKeys(e) {
-  const id = e.key.toUpperCase();
-  const audio = document.getElementById(id);
+// function setHotKeys(e) {
+//   const id = e.key.toUpperCase();
+//   const audio = document.getElementById(id);
   
-  if(audio) {
-    audio.currentTime = 0;
-    const parent = audio.parentNode;
-    parent.classList.add('active');
+//   if(audio) {
+//     audio.currentTime = 0;
+//     const parent = audio.parentNode;
+//     parent.classList.add('active');
     
-    // const display = parent.parentNode;
-    // display.querySelector('h1').innerText = `${id} is playing`;
-    audio.play();
-    audio.click();
-  }
-}
-
+//     // const display = parent.parentNode;
+//     // display.querySelector('h1').innerText = `${id} is playing`;
+//     audio.play();
+//     audio.click();
+//   }
+// }
 class AudioButtonWithHotKeys extends React.Component {
   constructor(props) {
     super(props);
@@ -73,7 +72,7 @@ class AudioButtonWithHotKeys extends React.Component {
           onClick={() => {
             if(hotKeysActivated) {
               this.playSound();
-              setTimeout(() => callback(), 100);
+              callback();
             }
           }}
           id={`button-${keystroke}`}
