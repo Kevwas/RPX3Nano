@@ -110,7 +110,6 @@ const CardsSection: React.FC<{
         isOpen={showModal}
         cssClass="add-card-modal"
         swipeToClose={true}
-        // presentingElement={router || undefined}
         onDidDismiss={() => {
           toggleIsEditing(false);
           setShowModal(false);
@@ -128,11 +127,10 @@ const CardsSection: React.FC<{
             minlength={1}
             maxlength={100}
             spellcheck
-          ></IonInput>
+          />
           <IonButton
             className="ion-button"
             color="primary"
-            // expand="block"
             size="small"
             onClick={updateCardHandler}
           >

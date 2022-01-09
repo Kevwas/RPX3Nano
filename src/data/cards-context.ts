@@ -25,6 +25,8 @@ interface CardContext {
     isEditing: boolean;
     cards: Card[];
     selectedCard: Card;
+    immersionModeOn: boolean;
+    triggerImmersionMode: (bool: boolean) => void;
     toggleIsEditing: (bool: boolean) => void;
     setSelectedCard: (card: Card) => void;
     addCard: (title: string, stage: Stage) => void;
@@ -49,6 +51,8 @@ const CardsContext = React.createContext<CardContext>(
             steps: [],
             userInterval: 0.25
         },
+        immersionModeOn: false,
+        triggerImmersionMode: () => { },
         toggleIsEditing: () => { },
         setSelectedCard: () => { },
         addCard: () => { },

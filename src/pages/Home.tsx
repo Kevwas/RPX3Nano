@@ -25,8 +25,9 @@ import db from "../data/db.json";
 
 const Home: React.FC = () => {
   const user = JSON.parse(JSON.stringify(db)).user;
-  const { cards } = useContext(CardsContext);
+  const { cards, immersionModeOn } = useContext(CardsContext);
   const [confetti, setConfetti] = useState<boolean>(false);
+  // const []
 
   const showConfetti = () => {
     if (!confetti) {
@@ -77,17 +78,21 @@ const Home: React.FC = () => {
       <IonContent color="medium" fullscreen>
         <IonGrid style={{ paddingBottom: 30 }}>
           <IonRow class="ion-justify-content-center">
-            <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
-              <BrowserPanel
-                user={user}
-                startingCards={startingCards}
-                endingCards={endingCards}
-                comonCards={comonCards}
-              />
-            </IonCol>
-            <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
-              <EditorPanel />
-            </IonCol>
+            {!immersionModeOn &&
+              <>
+                <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
+                  <BrowserPanel
+                    user={user}
+                    startingCards={startingCards}
+                    endingCards={endingCards}
+                    comonCards={comonCards}
+                  />
+                </IonCol>
+                <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
+                  <EditorPanel />
+                </IonCol>
+              </>
+            }
             {/* <IonCol size-md="3">
               <TrainerPanel
                 selectedCard={cardsCtx.selectedCard}

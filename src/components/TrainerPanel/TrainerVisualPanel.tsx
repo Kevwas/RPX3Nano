@@ -1,55 +1,197 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
   IonCard,
   IonCardSubtitle,
+  IonIcon,
+  useIonToast,
 } from "@ionic/react";
 import CardsContext, { Step } from "../../data/cards-context";
 import { SplittedText } from "../../data/types";
+import { expand, contract } from "ionicons/icons";
+
+// const getResponsiveFontSize = () => {
+//   if(window.innerHeight > 1200) {
+//       return 30
+//   }
+//   return 15;
+// }
 
 const TrainerVisualPanel: React.FC<{
   stepsStack: Step[];
   splittedText: SplittedText | null;
 }> = ({ stepsStack, splittedText }) => {
-  const cardsCtx = useContext(CardsContext);
-  const isLast = (step: Step) => stepsStack.indexOf(step) + 1 === stepsStack.length;
+  const { selectedCard, immersionModeOn, triggerImmersionMode } =
+    useContext(CardsContext);
+  const stepsContainerRef = useRef<HTMLDivElement>(null);
+  const [responsiveFontSize, setResponsiveFontSize] = useState<number>(30);
+  const [present] = useIonToast();
+
+  const isLast = (step: Step) =>
+    stepsStack.indexOf(step) + 1 === stepsStack.length;
+
+  useEffect(() => {
+    console.log(window.innerHeight);
+    if (!!stepsContainerRef.current) {
+      stepsContainerRef.current.scrollTo(
+        0,
+        stepsContainerRef.current.scrollHeight
+      );
+      // stepsContainerRef.current.scrollTop = stepsContainerRef.current.scrollHeight;
+    }
+  }, [stepsStack]);
+
+  useEffect(() => {
+    const handleResponsiveFontSize = () => {
+      console.log("resizing...");
+      console.log("responsive fontsize: ", responsiveFontSize);
+      if (window.innerHeight >= 900) {
+        setResponsiveFontSize(30);
+      } else if (window.innerHeight < 900 && window.innerHeight >= 500) {
+        setResponsiveFontSize(20);
+      } else {
+        setResponsiveFontSize(15);
+      }
+    };
+    window.addEventListener("resize", handleResponsiveFontSize);
+    return () => {
+      window.removeEventListener("resize", handleResponsiveFontSize);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <>
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <IonCardHeader>
         <IonCardTitle>Trainer Visual Panel</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
-        <IonCardTitle>{cardsCtx.selectedCard.title}</IonCardTitle>
-        <IonCardSubtitle>Speaking word: {splittedText && splittedText.speakingWord}</IonCardSubtitle>
+        <IonCardTitle>{selectedCard.title}</IonCardTitle>
+        <IonCardSubtitle>
+          Speaking word: {splittedText && splittedText.speakingWord}
+        </IonCardSubtitle>
       </IonCardContent>
       <div
         style={{
-          height: "100%",
+          minHeight: 300,
           width: "100%",
           marginTop: 10,
         }}
         className="scroll"
       >
-        {stepsStack.map((step) => (
-          <IonCard id={Math.random().toString() + step.id}>
-            {isLast(step) && splittedText ? (
-              <IonCardContent>
-                {splittedText.left}
-                <span style={{ backgroundColor: "yellow", color: "blue" }}>
-                  {splittedText.speakingWord}
-                </span>
-                {splittedText.right}
-              </IonCardContent>
-            ) : (
-              <IonCardContent>{step.text}</IonCardContent>
+        {!immersionModeOn ? (
+          stepsStack.map((step) => (
+            <IonCard id={Math.random().toString() + step.id}>
+              {isLast(step) && splittedText ? (
+                <IonCardContent>
+                  {splittedText.left}
+                  <span style={{ backgroundColor: "yellow", color: "blue" }}>
+                    {splittedText.speakingWord}
+                  </span>
+                  {splittedText.right}
+                </IonCardContent>
+              ) : (
+                <IonCardContent>{step.text}</IonCardContent>
+              )}
+            </IonCard>
+          ))
+        ) : (
+          <div
+            style={{
+              height: 300,
+              width: "100%",
+              marginTop: "10%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+            className="scroll"
+            ref={stepsContainerRef}
+          >
+            {stepsStack.map((step) =>
+              isLast(step) ? (
+                <div
+                  id={Math.random().toString() + step.id}
+                  style={{
+                    width: "50%",
+                    minWidth: 250,
+                    paddingLeft: responsiveFontSize * 2,
+                    paddingRight: responsiveFontSize * 2,
+                    // padding: "0 80px 0 80px",
+                    borderRadius: 5,
+                    border: "3px solid rgba(0, 0, 255, 0.5)",
+                  }}
+                >
+                  {splittedText ? (
+                    <p
+                      style={{
+                        fontSize: responsiveFontSize,
+                      }}
+                    >
+                      {splittedText.left}
+                      <span
+                        style={{ backgroundColor: "yellow", color: "blue" }}
+                      >
+                        {splittedText.speakingWord}
+                      </span>
+                      {splittedText.right}
+                    </p>
+                  ) : (
+                    <p style={{ fontSize: responsiveFontSize, color: "#aaa" }}>
+                      {step.text}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div
+                  id={Math.random().toString() + step.id}
+                  style={{
+                    width: "50%",
+                    minWidth: 250,
+                    paddingLeft: responsiveFontSize * 2,
+                    paddingRight: responsiveFontSize * 2,
+                  }}
+                >
+                  <p style={{ fontSize: responsiveFontSize, color: "#aaa" }}>
+                    {step.text}
+                  </p>
+                </div>
+              )
             )}
-          </IonCard>
-        ))}
+          </div>
+        )}
       </div>
-    </>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "flex-end",
+          marginTop: "auto",
+          flex: 1,
+        }}
+      >
+        <button style={{ backgroundColor: "transparent" }}>
+          <IonIcon
+            style={{ margin: 15 }}
+            icon={immersionModeOn ? contract : expand}
+            size="large"
+            onClick={() => {
+              present(`Immersion mode ${!immersionModeOn ? 'ON' : 'OFF'}.`, 1000);
+              triggerImmersionMode(!immersionModeOn)
+            }}
+          />
+        </button>
+      </div>
+    </div>
   );
 };
 

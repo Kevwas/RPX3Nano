@@ -12,8 +12,12 @@ const CardsContextProvider: React.FC = (props) => {
     userInterval: 0.25
 }]);
   const [selectedCard, set_SelectedCard] = useState<Card>(cards[0]);
-  const isEditing = useRef<boolean>(false);
-  const toggleIsEditing = (bool: boolean) => isEditing.current = bool;
+
+  const [immersionModeOn, setImmersionModeOn] = useState<boolean>(false);
+  const triggerImmersionMode = (bool: boolean) => setImmersionModeOn(bool);
+
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const toggleIsEditing = (bool: boolean) => setIsEditing(bool);
 
   useEffect(() => {
     // Retrieving data from localStorage once the app inits:
@@ -147,6 +151,7 @@ const CardsContextProvider: React.FC = (props) => {
 
       updatedCard.steps = updatedCardSteps;
       updatedCards[updatedCardIndex] = updatedCard;
+      setSelectedCard(updatedCard);
       return updatedCards;
     });
   };
@@ -165,6 +170,7 @@ const CardsContextProvider: React.FC = (props) => {
 
       updatedCard.steps = updatedCardSteps;
       updatedCards[updatedCardIndex] = updatedCard;
+      setSelectedCard(updatedCard);
       return updatedCards;
     });
   };
@@ -177,7 +183,8 @@ const CardsContextProvider: React.FC = (props) => {
       );
       const updatedCard = { ...updatedCards[updatedCardIndex] };
 
-      const updatedCardSteps = updatedCards[updatedCardIndex].steps.slice();
+      // const updatedCardSteps = updatedCards[updatedCardIndex].steps.slice();
+      const updatedCardSteps = updatedCard.steps;
       const updatedCardStepIndex = updatedCardSteps.findIndex(
         (step) => step.id === stepId
       );
@@ -185,10 +192,11 @@ const CardsContextProvider: React.FC = (props) => {
         ...updatedCardSteps[updatedCardStepIndex],
         text: newText,
       };
-      updatedCardSteps[updatedCardIndex] = updatedStep;
+      updatedCardSteps[updatedCardStepIndex] = updatedStep;
 
       updatedCard.steps = updatedCardSteps;
       updatedCards[updatedCardIndex] = updatedCard;
+      setSelectedCard(updatedCard);
       return updatedCards;
     });
   };
@@ -196,7 +204,7 @@ const CardsContextProvider: React.FC = (props) => {
   return (
     <CardsContext.Provider
       value={{
-        isEditing: isEditing.current,
+        isEditing,
         toggleIsEditing,
         cards,
         selectedCard,
@@ -210,6 +218,8 @@ const CardsContextProvider: React.FC = (props) => {
         deleteStep,
         updateStep,
         updateUserInterval,
+        immersionModeOn,
+        triggerImmersionMode
       }}
     >
       {props.children}

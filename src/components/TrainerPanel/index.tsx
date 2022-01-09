@@ -27,8 +27,7 @@ import useTTS from "../../hooks/useTTS";
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
 }) => {
-  const cardsCtx = useContext(CardsContext);
-  const { selectedCard, cards, setSelectedCard } = cardsCtx;
+  const { selectedCard, cards, setSelectedCard, immersionModeOn } = useContext(CardsContext);
   const [splittedText, setSplittedText] = useState<SplittedText | null>(null);
 
   const unlockMasteryFeedback = useRef<boolean>(false);
@@ -231,7 +230,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
 
   return (
     <>
-      <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
+      <IonCol size="12" size-md="6" size-lg="6" size-xl={immersionModeOn ? "9" : "3"}>
         <IonCard className="ion-card-section">
           <TrainerVisualPanel
             stepsStack={stepsStack}

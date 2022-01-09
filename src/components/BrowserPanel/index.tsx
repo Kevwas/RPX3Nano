@@ -51,13 +51,13 @@ const BrowserPanel: React.FC<{
         <CardsSection sectionName="Ending Card" cards={endingCards} />
         <CardsSection sectionName="Comon Card" cards={comonCards} />
         <button
-          style={{ marginLeft: "10%", backgroundColor: "transparent" }}
+          style={{ marginLeft: "5%", backgroundColor: "transparent", display: "flex", alignItems: "center" }}
           onClick={() => {
             toggleIsEditing(true);
             setShowModal(true);
           }}
         >
-          <IonIcon icon={add} size="small" />
+          <IonIcon icon={add} size="small" /><IonLabel style={{color: '#999'}}>Add Card</IonLabel>
         </button>
         <IonModal
           isOpen={showModal}
