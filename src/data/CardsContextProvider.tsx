@@ -6,10 +6,10 @@ import { Storage } from "@capacitor/storage";
 const CardsContextProvider: React.FC = (props) => {
   const [cards, setCards] = useState<Card[]>([{
     id: '',
-    title: '',
+    title: 'Select a card in the Browser Panel',
     stage: 'starting',
     steps: [],
-    userInterval: 0.25
+    userInterval: 0
 }]);
   const [selectedCard, set_SelectedCard] = useState<Card>(cards[0]);
 

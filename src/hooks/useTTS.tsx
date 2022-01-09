@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Storage } from "@capacitor/storage";
 
 const useTTS = () => {
@@ -24,7 +24,6 @@ const useTTS = () => {
   const utterance = useMemo(() => new SpeechSynthesisUtterance(), []);
 
   useEffect(() => {
-    console.log(voice);
     // Retrieving data from localStorage once the app inits:
     (async () => {
       const utteranceData = await Storage.get({ key: "RPX3NanoTtsUtterance" });

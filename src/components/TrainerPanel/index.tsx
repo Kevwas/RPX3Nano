@@ -27,7 +27,8 @@ import useTTS from "../../hooks/useTTS";
 const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
   showConfetti,
 }) => {
-  const { selectedCard, cards, setSelectedCard, immersionModeOn } = useContext(CardsContext);
+  const { selectedCard, cards, setSelectedCard, immersionModeOn } =
+    useContext(CardsContext);
   const [splittedText, setSplittedText] = useState<SplittedText | null>(null);
 
   const unlockMasteryFeedback = useRef<boolean>(false);
@@ -59,15 +60,15 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
         // Perform type conversions.
         str = String(str);
         pos = Number(pos) >>> 0;
-      
+
         // Search for the word's beginning and end.
         const left = str.slice(0, pos + 1).search(/\S+$/),
           right = str.slice(pos).search(/\s/);
-      
+
         const leftText = str.slice(0, pos);
         const speakingWord = str.slice(left, right + pos);
         const rightText = str.slice(pos + speakingWord.length);
-      
+
         // The last word in the string is a special case.
         if (right < 0) {
           return {
@@ -76,7 +77,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
             right: null,
           };
         }
-      
+
         return {
           left: leftText,
           speakingWord,
@@ -89,7 +90,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
         const text = stepsStackCopy.pop()!.text;
         setSplittedText(splitText(text, event.charIndex));
       });
-    
+
       onEnd(() => {
         setSplittedText(null);
       });
@@ -230,7 +231,12 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
 
   return (
     <>
-      <IonCol size="12" size-md="6" size-lg="6" size-xl={immersionModeOn ? "9" : "3"}>
+      <IonCol
+        size="12"
+        size-md={immersionModeOn ? "8" : "6"}
+        size-lg={immersionModeOn ? "8" : "6"}
+        size-xl={immersionModeOn ? "9" : "3"}
+      >
         <IonCard className="ion-card-section">
           <TrainerVisualPanel
             stepsStack={stepsStack}
@@ -239,7 +245,12 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
         </IonCard>
       </IonCol>
       {/* Splitted into 2-columns TrainerControlPanel */}
-      <IonCol size="12" size-md="6" size-lg="6" size-xl="3">
+      <IonCol
+        size="12"
+        size-md={immersionModeOn ? "4" : "6"}
+        size-lg={immersionModeOn ? "4" : "6"}
+        size-xl="3"
+      >
         <IonCard className="ion-card-section">
           <TrainerControlPanel
             addStepToStepsStack={addStepToStepsStack}
