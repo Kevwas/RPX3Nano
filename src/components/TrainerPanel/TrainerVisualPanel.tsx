@@ -33,7 +33,6 @@ const TrainerVisualPanel: React.FC<{
     stepsStack.indexOf(step) + 1 === stepsStack.length;
 
   useEffect(() => {
-    console.log(window.innerHeight);
     if (!!stepsContainerRef.current) {
       stepsContainerRef.current.scrollTo(
         0,
@@ -45,8 +44,6 @@ const TrainerVisualPanel: React.FC<{
 
   useEffect(() => {
     const handleResponsiveFontSize = () => {
-      console.log("resizing...");
-      console.log("responsive fontsize: ", responsiveFontSize);
       if (window.innerHeight >= 900) {
         setResponsiveFontSize(30);
       } else if (window.innerHeight < 900 && window.innerHeight >= 500) {
