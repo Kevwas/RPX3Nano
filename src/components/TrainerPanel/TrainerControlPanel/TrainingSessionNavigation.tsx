@@ -1,7 +1,7 @@
 import { IonButton, IonItem } from "@ionic/react";
 import React, { useContext } from "react";
 import AudioButtonWithHotKeys from "../../../utils/AudioButtonWithHotKeys";
-import ContextProvider, { Card } from "../../../data/cards-context";
+import ContextProvider from "../../../data/cards-context";
 
 const TrainingSessionNavigation: React.FC<{
   addStepToStepsStack: () => void;
@@ -59,7 +59,7 @@ const TrainingSessionNavigation: React.FC<{
           key={3}
           audio={"https://www.pacdv.com/sounds/interface_sound_effects/sound93.wav"}
         />
-  
+        
         <IonButton
           className="ion-button"
           color="primary"

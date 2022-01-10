@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   IonCardContent,
   IonItem,
@@ -7,7 +7,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/react";
-import CardsContext, { Stage } from "../../data/cards-context";
+import CardsContext from "../../data/cards-context";
 
 const CardProperties: React.FC = () => {
   const { updateStage, selectedCard } = useContext(CardsContext);

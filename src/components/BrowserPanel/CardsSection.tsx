@@ -72,7 +72,8 @@ const CardsSection: React.FC<{
             <IonLabel>{card.title}</IonLabel>
             <button
               style={{ backgroundColor: "transparent" }}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 setEditingCard(card);
                 toggleIsEditing(true);
                 setShowModal(true);
@@ -91,7 +92,8 @@ const CardsSection: React.FC<{
                     "no",
                     {
                       text: "yes",
-                      handler: () => {
+                      handler: (e) => {
+                        e.stopPropagation();
                         deleteCard(card.id);
                         present(`Card ${card.title} deleted.`, 2000);
                       },
