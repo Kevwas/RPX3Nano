@@ -109,6 +109,7 @@ const TrainerPanel: React.FC<{ showConfetti: () => void }> = ({
     // Then, update the selectedCard to be the next card on the cards array
     // And, add the first step of the new card to the stepsStack
     // And, add the rest of the steps of the cards to the stepsQueu
+    // console.log('Adding Step to stepsStack...');
 
     cancel(); // Stop TTS
 
