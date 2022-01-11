@@ -82,25 +82,10 @@ const TrainingSessionNavigation: React.FC<{
                   }
                 }}
               >
-                <IonGrid style={{ display: "flex" }}>
-                  <IonCol size="4" style={{ flex: 1 }}></IonCol>
-                  <IonCol size="4" style={{ flex: 1 }}>
-                    {audioButton.text}
-                  </IonCol>
-                  <IonCol
-                    size="4"
-                    style={{
-                      display: "flex",
-                      flex: 1,
-                      justifyContent: "flex-end",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <span style={{ fontSize: 9, marginBottom: -2, marginRight: -15 }}>
-                      {audioButton.keystroke}
-                    </span>
-                  </IonCol>
-                </IonGrid>
+                {audioButton.text}
+                <span style={{ position: "fixed", right: 22, bottom: 7, fontSize: 9, marginBottom: -2, marginRight: -15 }}>
+                  {audioButton.keystroke}
+                </span>
                 {!isEditing && (
                   <audio ref={audioButton.audioRef} src={audioButton.audioURL} id={`audio-${audioButton.keystroke.toUpperCase()}`} />
                 )}

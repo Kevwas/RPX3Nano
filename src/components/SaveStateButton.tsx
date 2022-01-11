@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import CardsContext from "../data/cards-context";
 import { saveAs } from "file-saver";
-import { IonButton } from "@ionic/react";
+import { IonButton, IonCardContent } from "@ionic/react";
 
 const SaveStateButton: React.FC = () => {
   const cardsCTX = useContext(CardsContext);
@@ -20,12 +20,13 @@ const SaveStateButton: React.FC = () => {
     saveAs(blobCSV, "RPX3Nano-State.csv");
   };
   return (
-    <>
+    <IonCardContent style={{ display: "flex", padding: "0 30px 0 30px", marginTop: 10, marginBottom: 20 }}>
       <IonButton
         color="secondary"
         expand="block"
         size="small"
         onClick={saveStateToJSON}
+        style={{flex: 1}}
       >
         .json
       </IonButton>
@@ -34,10 +35,11 @@ const SaveStateButton: React.FC = () => {
         expand="block"
         size="small"
         onClick={saveStateToCSV}
+        style={{flex: 1}}
       >
         .csv
       </IonButton>
-    </>
+    </IonCardContent>
   );
 };
 
