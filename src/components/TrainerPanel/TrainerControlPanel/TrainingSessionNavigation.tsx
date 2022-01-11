@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { IonButton, IonItem } from "@ionic/react";
-import AudioButtonWithHotKeys from "./AudioButtonWithHotKeys";
+import { IonButton, IonCol, IonGrid, IonItem } from "@ionic/react";
 import ContextProvider from "../../../data/cards-context";
 
 const TrainingSessionNavigation: React.FC<{
@@ -24,7 +23,6 @@ const TrainingSessionNavigation: React.FC<{
 
   useEffect(() => {
     const keydown = (e: KeyboardEvent) => {
-      // console.log(e); 
       if (e.key === "q" || e.key === "w" || e.key === "a" || e.key === "s") {
         if (e.repeat) {
           e.preventDefault();
@@ -55,7 +53,14 @@ const TrainingSessionNavigation: React.FC<{
     {keystroke: "Q", callback: removeStepFromStepsStack, text: "previous step", audioRef: audio_Q, audioURL: audioSounds.moveStep },
     {keystroke: "S", callback: nextCard, text: "previous card", audioRef: audio_S, audioURL: audioSounds.moveCard },
     {keystroke: "A", callback: previousCard, text: "previous card", audioRef: audio_A, audioURL: audioSounds.moveCard }
-  ]
+  ];
+
+  const playSound = (audioRef: React.RefObject<HTMLAudioElement>, callback: () => void) => {
+    if (audioRef.current) {
+      audioRef.current.play();
+      callback();
+    }
+  };
 
   return (
     <>
@@ -65,14 +70,43 @@ const TrainingSessionNavigation: React.FC<{
       <div style={{ padding: "0 30px 0 30px", marginTop: 10, marginBottom: 20 }}>
         {
           AudioButtonsWithHotKeys.map(audioButton => (
-              <AudioButtonWithHotKeys
-                hotKeysActivated={!isEditing}
-                callback={audioButton.callback}
-                keystroke={audioButton.keystroke}
-                text={audioButton.text}
-                audioURL={audioButton.audioURL}
-                audioRef={audioButton.audioRef}
-              />
+            <>
+              <IonButton
+                className="ion-button"
+                color="primary"
+                expand="block"
+                size="small"
+                onClick={() => {
+                  if (!isEditing) {
+                    playSound(audioButton.audioRef, audioButton.callback);
+                  }
+                }}
+              >
+                <IonGrid style={{ display: "flex" }}>
+                  <IonCol size="4" style={{ flex: 1 }}></IonCol>
+                  <IonCol size="4" style={{ flex: 1 }}>
+                    {audioButton.text}
+                  </IonCol>
+                  <IonCol
+                    size="4"
+                    style={{
+                      display: "flex",
+                      flex: 1,
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <span style={{ fontSize: 9, marginBottom: -2, marginRight: -15 }}>
+                      {audioButton.keystroke}
+                    </span>
+                  </IonCol>
+                </IonGrid>
+                {!isEditing && (
+                  <audio ref={audioButton.audioRef} src={audioButton.audioURL} id={`audio-${audioButton.keystroke.toUpperCase()}`} />
+                )}
+              </IonButton>
+              {audioButton.keystroke === "Q" && <div style={{height: 15}}></div>}
+            </>
           ))
         }
         <IonButton
