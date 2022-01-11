@@ -90,7 +90,9 @@ const TrainerVisualPanel: React.FC<{
               {isLast(step) && splittedText ? (
                 <IonCardContent>
                   {splittedText.left}
-                  <span style={{ backgroundColor: "yellow", color: "blue" }}>
+                  <span
+                    style={{ backgroundColor: "#FFC95F", color: "#5982FA" }}
+                  >
                     {splittedText.speakingWord}
                   </span>
                   {splittedText.right}
@@ -123,27 +125,35 @@ const TrainerVisualPanel: React.FC<{
                     minWidth: 250,
                     paddingLeft: responsiveFontSize * 2,
                     paddingRight: responsiveFontSize * 2,
-                    // padding: "0 80px 0 80px",
                     borderRadius: 5,
-                    border: "3px solid rgba(0, 0, 255, 0.5)",
+                    border: "3px solid rgba(89, 130, 250, 0.5)",
                   }}
                 >
                   {splittedText ? (
                     <p
                       style={{
                         fontSize: responsiveFontSize,
+                        alignSelf: "start",
+                        textAlign: "justify",
                       }}
                     >
                       {splittedText.left}
                       <span
-                        style={{ backgroundColor: "yellow", color: "blue" }}
+                        style={{ backgroundColor: "#FFC95F", color: "#5982FA" }}
                       >
                         {splittedText.speakingWord}
                       </span>
                       {splittedText.right}
                     </p>
                   ) : (
-                    <p style={{ fontSize: responsiveFontSize, color: "#aaa" }}>
+                    <p
+                      style={{
+                        fontSize: responsiveFontSize,
+                        color: "#aaa",
+                        alignSelf: "start",
+                        textAlign: "justify",
+                      }}
+                    >
                       {step.text}
                     </p>
                   )}
@@ -158,7 +168,14 @@ const TrainerVisualPanel: React.FC<{
                     paddingRight: responsiveFontSize * 2,
                   }}
                 >
-                  <p style={{ fontSize: responsiveFontSize, color: "#aaa" }}>
+                  <p
+                    style={{
+                      fontSize: responsiveFontSize,
+                      color: "#aaa",
+                      alignSelf: "start",
+                      textAlign: "justify",
+                    }}
+                  >
                     {step.text}
                   </p>
                 </div>
@@ -182,8 +199,11 @@ const TrainerVisualPanel: React.FC<{
             icon={immersionModeOn ? contract : expand}
             size="large"
             onClick={() => {
-              present(`Immersion mode ${!immersionModeOn ? 'ON' : 'OFF'}.`, 1000);
-              triggerImmersionMode(!immersionModeOn)
+              present(
+                `Immersion mode ${!immersionModeOn ? "ON" : "OFF"}.`,
+                1000
+              );
+              triggerImmersionMode(!immersionModeOn);
             }}
           />
         </button>

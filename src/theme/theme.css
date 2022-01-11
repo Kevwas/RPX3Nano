@@ -1,5 +1,6 @@
 :root {
   /* --ion-grid-width-xl: 1500px; */
+  --ion-font-family: url("../assets/fonts/Lexend_Deca/LexendDeca-Regular.ttf");
 }
 
 ion-select {
