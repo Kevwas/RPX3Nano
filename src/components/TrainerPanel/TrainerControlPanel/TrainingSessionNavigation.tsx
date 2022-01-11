@@ -51,7 +51,7 @@ const TrainingSessionNavigation: React.FC<{
   const AudioButtonsWithHotKeys = [
     {keystroke: "W", callback: addStepToStepsStack, text: "next step", audioRef: audio_W, audioURL: audioSounds.moveStep },
     {keystroke: "Q", callback: removeStepFromStepsStack, text: "previous step", audioRef: audio_Q, audioURL: audioSounds.moveStep },
-    {keystroke: "S", callback: nextCard, text: "previous card", audioRef: audio_S, audioURL: audioSounds.moveCard },
+    {keystroke: "S", callback: nextCard, text: "next card", audioRef: audio_S, audioURL: audioSounds.moveCard },
     {keystroke: "A", callback: previousCard, text: "previous card", audioRef: audio_A, audioURL: audioSounds.moveCard }
   ];
 
